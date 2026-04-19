@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\User;
+use App\Models\Promo;
+use App\Models\Product\Product;
 
 class Umkm extends Model
 {
@@ -37,12 +39,21 @@ class Umkm extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // from other table
+    // from other umkm table
     public function umkmData() {
         return $this->hasOne(UmkmData::class);
     }
 
     public function umkmImages() {
         return $this->hasMany(UmkmImmage::class);
+    }
+
+    // from other table
+    public function promos() {
+        return $this->hasMany(Promo::class);
+    }
+
+    public function products() {
+        return $this->hasMany(Product::class);
     }
 }
