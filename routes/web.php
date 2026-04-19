@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CatalogController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -21,6 +22,10 @@ Route::get('dashboard', function () {
 
 Route::controller(ProductController::class)->group(function() {
     Route::get('/product', 'index')->name('product');
+});
+
+Route::controller(CatalogController::class)->group(function() {
+    Route::get('/catalog', 'index')->name('catalog');
 });
 
 require __DIR__.'/settings.php';
