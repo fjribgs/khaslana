@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\UMKM\Umkm;
 use App\Models\Category;
+use App\Models\Order\OrderItem;
+use App\Models\Post\Post;
 use App\Models\Promo;
 use App\Models\Review\Review;
 
@@ -46,5 +48,13 @@ class Product extends Model
     // from other table
     public function reviews() {
         return $this->hasMany(Review::class);
+    }
+
+    public function posts() {
+        return $this->hasMany(Post::class);
+    }
+
+    public function orderItems() {
+        return $this->hasMany(OrderItem::class);
     }
 }

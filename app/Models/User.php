@@ -4,7 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Models\Review\Review;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,7 +11,14 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
 use App\Models\UMKM\Umkm;
+use App\Models\Review\Review;
 use App\Models\Review\ReviewLike;
+use App\Models\Cart\Cart;
+use App\Models\Order\Order;
+use App\Models\Post\Post;
+use App\Models\Post\PostLike;
+use App\Models\Post\Comment;
+use App\Models\Post\CommentLike;
 
 class User extends Authenticatable
 {
@@ -70,5 +76,39 @@ class User extends Authenticatable
         return $this->belongsToMany(Review::class, 'review_likes', 'review_id', 'user_id')
                     ->using(ReviewLike::class)
                     ->withTimestamps();
+    }
+
+    public function wishlists() {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function wishlistedUmkm() {
+        return $this->belongsToMany(Umkm::class, 'wihslists', 'umkm_id', 'user_id')
+                    ->using(Wishlist::class)
+                    ->withTimestamps();
+    }
+
+    public function cart() {
+        return $this->hasOne(Cart::class);
+    }
+
+    public function posts() {
+        return $this->hasMany(Post::class);
+    }
+
+    public function postLikes() {
+        return $this->hasMany(PostLike::class);
+    }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function commentLikes() {
+        return $this->hasMany(CommentLike::class);
+    }
+
+    public function orders() {
+        return $this->hasMany(Order::class);
     }
 }

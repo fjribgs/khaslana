@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->foreignId('umkm_id')->nullable()->constrained('umkms')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('cascade'); // relevant product
             $table->string('title');
             $table->text('content');
             $table->date('post_date');
@@ -41,11 +41,13 @@ return new class extends Migration
 
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            // nanti bisa diliat komen sebagai umkm atau bukannya dari relasi user->umkm jadi ga perlu umkm_id
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->foreignId('umkm_id')->nullable()->constrained('umkms')->onDelete('cascade');
             $table->foreignId('post_id')->constrained('posts')->onDelete('cascade');
             $table->text('comment');
             $table->timestamps();
+
+            $table->unique(['user_id', 'post_id', 'user_post_unique']);
         });
 
         Schema::create('comment_likes', function (Blueprint $table) {

@@ -2,6 +2,8 @@
 
 namespace App\Models\Product;
 
+use App\Models\Cart\CartItem;
+use App\Models\Order\OrderItem;
 use Illuminate\Database\Eloquent\Model;
 
 class ProductVariant extends Model
@@ -27,5 +29,14 @@ class ProductVariant extends Model
 
     public function variantAttributes() {
         return $this->hasMany(VariantAttribute::class, 'variant_id');
+    }
+
+    // from other table
+    public function cartItems() {
+        return $this->hasMany(CartItem::class, 'variant_id');
+    }
+
+    public function orderItems() {
+        return $this->hasMany(OrderItem::class, 'variant_id');
     }
 }

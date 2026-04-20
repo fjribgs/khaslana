@@ -9,6 +9,9 @@ use App\Models\User;
 use App\Models\Promo;
 use App\Models\Product\Product;
 use App\Models\Review\Review;
+use App\Models\Wishlist;
+use App\Models\Post\Post;
+use App\Models\Order\Order;
 
 class Umkm extends Model
 {
@@ -60,5 +63,23 @@ class Umkm extends Model
 
     public function reviews() {
         return $this->hasMany(Review::class);
+    }
+
+    public function wishlists() {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function wishlistedByUser() {
+        return $this->belongsToMany(User::class, 'wishlists', 'umkm_id', 'user_id')
+                    ->using(Wishlist::class)
+                    ->withTimestamps();
+    }
+
+    public function posts() {
+        return $this->hasMany(Post::class);
+    }
+
+    public function orders() {
+        return $this->hasMany(Order::class);
     }
 }
