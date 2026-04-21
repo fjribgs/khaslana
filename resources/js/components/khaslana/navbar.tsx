@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import "@/components/khaslana/css/navbar.css";
 import hamburger from "@/assets/icons/hamburger.png";
 import logo from "@/assets/icons/khaslana-logo-green.png";
-import { register, dashboard } from "@/routes";
+import { register, home } from "@/routes";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -42,7 +42,7 @@ export default function Navbar() {
         >
             <div className="navbar-left">
                 <Link
-                    href={dashboard()}
+                    href={home()}
                     onClick={handleCloseMenu}
                     className="flex items-center gap-3"
                 >

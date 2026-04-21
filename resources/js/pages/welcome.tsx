@@ -1,4 +1,4 @@
-import { Head} from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import Navbar from '@/components/khaslana/navbar';
 // import { dashboard, login, register } from '@/routes';
 
