@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
             $table->foreignId('province_id')->constrained('indonesia_provinces')->onDelete('restrict');
             $table->foreignId('city_id')->constrained('indonesia_cities')->onDelete('restrict');
-            $table->foreignId('ditrict_id')->constrained('indonesia_districts')->onDelete('restrict');
+            $table->foreignId('district_id')->constrained('indonesia_districts')->onDelete('restrict');
             $table->foreignId('village_id')->constrained('indonesia_villages')->onDelete('restrict');
             $table->string('store_name');
             $table->text('description');
