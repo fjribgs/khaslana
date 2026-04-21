@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "@/components/khaslana/css/navbar.css";
 import hamburger from "@/assets/icons/hamburger.png";
 import logo from "@/assets/icons/khaslana-logo-green.png";
+import { register, dashboard } from "@/routes";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -40,12 +41,18 @@ export default function Navbar() {
             }`}
         >
             <div className="navbar-left">
-                <img
-                    src={logo}
-                    alt="Logo Khaslana"
-                    className="navbar-logo"
-                />
-                <div className="logo-name">Khaslana</div>
+                <Link
+                    href={dashboard()}
+                    onClick={handleCloseMenu}
+                    className="flex items-center gap-3"
+                >
+                    <img
+                        src={logo}
+                        alt="Logo Khaslana"
+                        className="navbar-logo"
+                    />
+                    <div className="font-semibold">Khaslana</div>
+                </Link>
             </div>
             <div 
                 className="navbar-toggle" 
@@ -75,7 +82,7 @@ export default function Navbar() {
                     ))}
                     <li>
                         <Link
-                            href="/register"
+                            href={register()}
                             className="btn-primary-khaslana"
                             onClick={handleCloseMenu}
                         >
