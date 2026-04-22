@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import Footer from '@/components/khaslana/footer';
 import Navbar from '@/components/khaslana/navbar';
 // import { dashboard, login, register } from '@/routes';
 
@@ -43,6 +44,7 @@ export default function Welcome() {
                 </section> */}
                 <p>test test</p>
             </div>
+            <Footer />
         </>
     );
 }
