@@ -2,7 +2,6 @@ import { Form, Head } from '@inertiajs/react';
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import React from 'react';
 import Google from '@/assets/icons/login/google.svg';
-// import Back from '@/assets/icons/login/back.svg';
 import KhaslanaLogo from '@/assets/images/khaslana.svg';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -44,7 +43,7 @@ export default function Login({
             <div className="flex-1 flex items-center justify-center px-6 lg:px-16 py-12 relative">
                 <a
                     href="/"
-                    className="absolute top-8 left-6 flex items-center gap-2 text-[#99FF33]"
+                    className="absolute top-10 left-6 flex items-center gap-2 text-[#99FF33]"
                 >
                     <ArrowLeft className="w-5 h-5" />
                     Beranda
