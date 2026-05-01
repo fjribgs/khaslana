@@ -6,7 +6,7 @@ import UmkmSection from "@/components/khaslana/welcome/umkm-section";
 
 export default function WelcomeIndex() {
     return (
-        <div className="flex flex-col items-center p-6 lg:justify-center lg:p-8">
+        <div className="flex flex-col items-center lg:justify-center">
             <HeroSection />
             <UmkmSection />
             <CommunitySection />
