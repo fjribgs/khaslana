@@ -150,7 +150,7 @@ export default function Footer() {
                                             className="w-3.5 h-3.5 object-contain"
                                         />
                                     </span>
-                                    <span>khaslana@gmail.com</span>
+                                    <span>khaslana.official@gmail.com</span>
                                 </li>
                             </ul>
                         </div>

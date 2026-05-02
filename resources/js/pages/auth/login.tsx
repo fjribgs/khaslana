@@ -64,7 +64,7 @@ export default function Login({
                                         id="email"
                                         type="text"
                                         name="email"
-                                        placeholder="Username / Email"
+                                        placeholder="Email"
                                         className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-[#A3A3A3]"
                                     />
                                 </div>
