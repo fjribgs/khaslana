@@ -5,7 +5,7 @@ import Phone from '@/assets/icons/footer/phone_icon.png';
 import Youtube from '@/assets/icons/footer/yt.png';
 import Khaslana from '@/assets/images/landing-page/Khaslana.svg';
 import Mail from '@/assets/images/landing-page/Vector.svg';
-import { catalog, umkm, community } from '@/routes';
+import { catalog, umkm, community, about } from '@/routes';
 
 const socials = [
     {
@@ -140,7 +140,7 @@ export default function Footer() {
                                             className="w-3.5 h-3.5 object-contain"
                                         />
                                     </span>
-                                    <span>+62 858 6028 2313</span>
+                                    <span>+62 851 9929 7123</span>
                                 </li>
                                 <li className="flex items-start gap-2.25 text-white text-[15px]">
                                     <span className="flex items-center justify-center w-4 h-4 shrink-0 mt-px">
@@ -150,7 +150,7 @@ export default function Footer() {
                                             className="w-3.5 h-3.5 object-contain"
                                         />
                                     </span>
-                                    <span>hello@khaslana.id</span>
+                                    <span>khaslana@gmail.com</span>
                                 </li>
                             </ul>
                         </div>
@@ -164,7 +164,7 @@ export default function Footer() {
                     <div className="flex gap-7">
                         <a
                             className="text-white decoration-0 text-[14px] transition-colors duration-200 ease-in hover:text-[#989898]"
-                            href="#"
+                            href={about().url}
                         >
                             Tentang Kami
                         </a>
