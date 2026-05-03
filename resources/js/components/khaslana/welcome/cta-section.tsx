@@ -1,3 +1,5 @@
+import { register } from "@/routes";
+
 export default function CtaSection() {
     return (
         <section className="relative w-full px-6 lg:px-14 pt-20 lg:pt-30 pb-16 lg:pb-20 flex justify-center items-center
@@ -19,7 +21,7 @@ export default function CtaSection() {
                     Semua dalam satu genggaman
                 </p>
                 <a
-                    href="#"
+                    href={register().url}
                     className="btn-primary-khaslana inline-block font-semibold w-full md:w-fit text-sm sm:text-base md:text-lg px-6 sm:px-10 md:px-32 py-3 sm:py-4"
                 >
                     MULAI

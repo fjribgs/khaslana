@@ -7,7 +7,7 @@ import KhaslanaLogo from '@/assets/images/khaslana.svg';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Spinner } from '@/components/ui/spinner';
-import { login } from '@/routes';
+import { login, home } from '@/routes';
 import { store } from '@/routes/register';
 
 export default function Register() {
@@ -21,13 +21,19 @@ export default function Register() {
             <Head title="Register" />
             <div className="hidden lg:flex flex-1 items-center justify-center m-10 rounded-2xl bg-[linear-gradient(180deg,#000000_40%,rgba(153,255,51,0.9)_100%)]">
                 <div className="flex flex-col items-center gap-3">
-                    <img src={KhaslanaLogo} className="w-[360px]" />
+                    <img
+                        src={KhaslanaLogo}
+                        className="w-[360px]"
+                    />
                     <p className="text-white font-bold pt-8 text-6xl">Khaslana</p>
                 </div>
             </div>
 
             <div className="flex-1 flex items-center justify-center px-6 lg:px-16 py-12 relative">
-                <a href="/" className="absolute top-10 left-6 flex items-center gap-2 text-[#99FF33]">
+                <a
+                    href={home().url}
+                    className="absolute top-10 left-6 flex items-center gap-2 text-[#99FF33]"
+                >
                     <ArrowLeft className="w-5 h-5" />
                     Beranda
                 </a>
@@ -38,7 +44,10 @@ export default function Register() {
                         </h1>
                         <p className="text-[#989898] text-[14px]">
                             Sudah punya akun?{" "}
-                            <TextLink href={login()} className="text-[#99FF33] no-underline">
+                            <TextLink
+                                href={login()}
+                                className="text-[#99FF33] no-underline"
+                            >
                                 Login
                             </TextLink>
                         </p>

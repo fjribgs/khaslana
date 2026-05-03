@@ -28,7 +28,7 @@ const socials = [
 export default function Footer() {
     return (
         <footer className="bg-[#262626] border-t pt-15 max-md:flex-col md:gap-7.5">
-            <div className="max-w-7xl mx-auto px-6 lg:px-10">
+            <div className="w-full px-6 lg:px-[85px] mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 pb-12 items-start">
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-2.5">
@@ -63,7 +63,7 @@ export default function Footer() {
                             ))}
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-3">
                         <div className="flex flex-col gap-4">
                             <h5 className="text-white text-[18px] font-semibold m-0">
                                 Layanan
@@ -122,7 +122,7 @@ export default function Footer() {
                                 Kontak
                             </h5>
                             <ul className="flex flex-col gap-3">
-                                <li className="flex items-start gap-2.25 text-white text-[15px]">
+                                <li className="flex items-start gap-3 text-white text-[15px]">
                                     <span className="flex items-center justify-center w-4 h-4 shrink-0 mt-px">
                                         <img
                                             src={Location}
@@ -132,7 +132,7 @@ export default function Footer() {
                                     </span>
                                     <span>Cibiru, Jawa Barat, Indonesia</span>
                                 </li>
-                                <li className="flex items-start gap-2.25 text-white text-[15px]">
+                                <li className="flex items-start gap-3 text-white text-[15px]">
                                     <span className="flex items-center justify-center w-4 h-4 shrink-0 mt-px">
                                         <img
                                             src={Phone}
@@ -142,7 +142,7 @@ export default function Footer() {
                                     </span>
                                     <span>+62 851 9929 7123</span>
                                 </li>
-                                <li className="flex items-start gap-2.25 text-white text-[15px]">
+                                <li className="flex items-start gap-3 text-white text-[15px] leading-relaxed">
                                     <span className="flex items-center justify-center w-4 h-4 shrink-0 mt-px">
                                         <img
                                             src={Mail}
@@ -150,7 +150,7 @@ export default function Footer() {
                                             className="w-3.5 h-3.5 object-contain"
                                         />
                                     </span>
-                                    <span>khaslana.official@gmail.com</span>
+                                    <span className='break-all'>khaslana.official@gmail.com</span>
                                 </li>
                             </ul>
                         </div>

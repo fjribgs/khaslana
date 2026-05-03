@@ -8,7 +8,7 @@ import TextLink from '@/components/text-link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { register } from '@/routes';
+import { register, home } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
@@ -42,7 +42,7 @@ export default function Login({
             </div>
             <div className="flex-1 flex items-center justify-center px-6 lg:px-16 py-12 relative">
                 <a
-                    href="/"
+                    href={home().url}
                     className="absolute top-10 left-6 flex items-center gap-2 text-[#99FF33]"
                 >
                     <ArrowLeft className="w-5 h-5" />
