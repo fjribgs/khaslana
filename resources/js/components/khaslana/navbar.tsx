@@ -1,10 +1,11 @@
 import { Link, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import "@/components/khaslana/css/navbar.css";
+// import DefaultProfile from "@/assets/icons/default-profile.png";
 import hamburger from "@/assets/icons/hamburger.png";
 import logo from "@/assets/icons/khaslana-logo-green.png";
 import {
-    register,
+    login,
     home,
     catalog,
     community,
@@ -88,8 +89,9 @@ export default function Navbar() {
                         </li>
                     ))}
                     <li>
+                        {/* <img src={DefaultProfile} alt="" className="h-12 w-12" /> */}
                         <Link
-                            href={register()}
+                            href={login()}
                             className="btn-primary-khaslana"
                             onClick={handleCloseMenu}
                         >
