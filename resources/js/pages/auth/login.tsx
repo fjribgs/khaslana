@@ -25,6 +25,10 @@ export default function Login({
 }: Props) {
     const [showPassword, setShowPassword] = React.useState(false);
 
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:8000/auth/google";
+    };
+
     return (
         <div className="min-h-screen flex bg-[#1E1B26]">
             <Head title='Login'>
@@ -115,6 +119,7 @@ export default function Login({
                                     Masuk
                                 </button>
                                 <button
+                                    onClick={handleGoogleLogin}
                                     type="button"
                                     className="btn-secondary-khaslana hover:cursor-pointer gap-2"
                                 >

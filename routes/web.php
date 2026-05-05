@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CommunityController;
@@ -19,6 +20,12 @@ Route::get('/about', function() {
     return Inertia::render('user/about');
 })->name('about');
 
+Route::controller(GoogleController::class)->group(function() {
+    Route::get('/auth/google', 'redirect');
+    Route::get('/auth/google/callback', 'callback');
+});
+
+// login required routes
 Route::middleware(['auth', 'verified'])->group(function () {
     // dashboard route
     Route::controller(DashboardController::class)->group(function() {
