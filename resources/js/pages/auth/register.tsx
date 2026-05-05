@@ -23,7 +23,7 @@ export default function Register() {
                 <div className="flex flex-col items-center gap-3">
                     <img
                         src={KhaslanaLogo}
-                        className="w-[360px]"
+                        className="w-90"
                     />
                     <p className="text-white font-bold pt-8 text-6xl">Khaslana</p>
                 </div>
@@ -60,7 +60,7 @@ export default function Register() {
                         {({ processing, errors }) => (
                             <>
                                 <div className="flex flex-col md:flex-row gap-3.5 w-full">
-                                    <div className="flex flex-1 bg-blue items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className="flex flex-1 bg-blue items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-2xl px-5 py-3 focus-within:border-[#99FF33] transition">
                                         <input
                                             name="name"
                                             placeholder="Nama lengkap"
@@ -70,7 +70,7 @@ export default function Register() {
                                         />
                                     </div>
                                     <InputError message={errors.name} />
-                                    <div className="flex flex-1 bg-red items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className="flex flex-1 bg-red items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-2xl px-5 py-3 focus-within:border-[#99FF33] transition">
                                         <input
                                             name="username"
                                             placeholder="Username"
@@ -82,7 +82,7 @@ export default function Register() {
                                     <InputError message={errors.username} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-2xl px-5 py-3 focus-within:border-[#99FF33] transition">
                                         <input
                                             name="email"
                                             type="email"
@@ -93,7 +93,7 @@ export default function Register() {
                                     <InputError message={errors.email} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-2xl px-5 py-3 focus-within:border-[#99FF33] transition">
                                         <input
                                             name="password"
                                             type={showPassword ? "text" : "password"}
@@ -111,7 +111,7 @@ export default function Register() {
                                     <InputError message={errors.password} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-2xl px-5 py-3 focus-within:border-[#99FF33] transition">
                                         <input
                                             name="password_confirmation"
                                             type={showConfirm ? "text" : "password"}
@@ -129,7 +129,7 @@ export default function Register() {
                                     <InputError message={errors.password_confirmation} />
                                 </div>
                                 <div className="flex items-center gap-2 px-1 text-[14px] text-[#989898]">
-                                    <input type="checkbox" name="terms" id='terms' className="accent-[#99FF33] w-[18px] h-[18px]" />
+                                    <input type="checkbox" name="terms" id='terms' className="accent-[#99FF33] w-4.5 h-4.5" />
                                     <label htmlFor="terms" className='hover:cursor-pointer'>
                                         Saya setuju terhadap{" "}
                                         <span className="text-[#99FF33] underline underline-offset-2">
