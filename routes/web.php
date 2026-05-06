@@ -21,8 +21,8 @@ Route::get('/about', function() {
 })->name('about');
 
 Route::controller(GoogleController::class)->group(function() {
-    Route::get('/auth/google', 'redirect');
-    Route::get('/auth/google/callback', 'callback');
+    Route::get('/auth/google', 'redirect')->name('google-auth');
+    Route::get('/auth/google/callback', 'callback')->name('google-auth.callback');
 });
 
 // login required routes

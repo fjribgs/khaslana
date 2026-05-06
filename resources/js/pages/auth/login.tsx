@@ -8,7 +8,7 @@ import TextLink from '@/components/text-link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { register, home } from '@/routes';
+import { register, home, googleAuth } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
@@ -26,7 +26,7 @@ export default function Login({
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:8000/auth/google";
+        window.location.href = googleAuth().url;
     };
 
     return (

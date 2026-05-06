@@ -7,7 +7,7 @@ import KhaslanaLogo from '@/assets/images/khaslana.svg';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Spinner } from '@/components/ui/spinner';
-import { login, home } from '@/routes';
+import { login, home, googleAuth } from '@/routes';
 import { store } from '@/routes/register';
 
 export default function Register() {
@@ -15,6 +15,10 @@ export default function Register() {
     const [showConfirm, setShowConfirm] = React.useState(false);
     // const [isNamaClicked, setIsNamaClicked] = React.useState(false);
     // const [isUsernameClicked, setIsUsernameClicked] = React.useState(false);
+
+    const handleGoogleRegis = () => {
+        window.location.href = googleAuth().url;
+    }
 
     return (
         <div className="min-h-screen flex bg-[#1E1B26]">
@@ -146,6 +150,7 @@ export default function Register() {
                                     Buat akun
                                 </button>
                                 <button
+                                    onClick={handleGoogleRegis}
                                     type="button"
                                     className="btn-secondary-khaslana hover:cursor-pointer gap-2"
                                 >
