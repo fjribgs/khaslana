@@ -18,6 +18,7 @@ trait ProfileValidationRules
             'name' => $this->nameRules(),
             'username' => $this->usernameRules(),
             'email' => $this->emailRules($userId),
+            'terms' => $this->termRules(),
         ];
     }
 
@@ -59,6 +60,14 @@ trait ProfileValidationRules
             'regex:/^[a-zA-Z0-9_]+$/',
             'not_regex:/^_+$/',
             'unique:users,username' . ($userId ? ',' . $userId : ''),
+        ];
+    }
+
+    protected function termRules(?int $userId = null): array
+    {
+        return [
+            'required',
+            'accepted',
         ];
     }
 }

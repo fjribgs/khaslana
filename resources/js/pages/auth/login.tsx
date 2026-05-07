@@ -5,7 +5,6 @@ import Google from '@/assets/icons/login/google.svg';
 import KhaslanaLogo from '@/assets/images/khaslana.svg';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { register, home, googleAuth } from '@/routes';
@@ -47,9 +46,9 @@ export default function Login({
             <div className="flex-1 flex items-center justify-center px-6 lg:px-16 py-12 relative">
                 <a
                     href={home().url}
-                    className="absolute top-10 left-6 flex items-center gap-2 text-[#99FF33]"
+                    className="absolute top-10 left-6 flex items-center gap-2 text-[#99FF33] group transition-all duration-300"
                 >
-                    <ArrowLeft className="w-5 h-5" />
+                    <ArrowLeft className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-2" />
                     Beranda
                 </a>
                 <div className="w-full">
@@ -66,7 +65,7 @@ export default function Login({
                                 <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-full px-5 py-3 focus-within:border-[#99FF33]">
                                     <input
                                         id="email"
-                                        type="text"
+                                        type="email"
                                         name="email"
                                         placeholder="Email"
                                         tabIndex={1}
@@ -87,7 +86,7 @@ export default function Login({
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="opacity-60 hover:opacity-100 transition"
+                                        className="opacity-60 hover:opacity-100 transition hover:cursor-pointer"
                                     >
                                         {showPassword ? (
                                             <EyeOff className="w-5 h-5 text-white" />
@@ -98,11 +97,13 @@ export default function Login({
                                 </div>
                                 <InputError message={errors.password} />
                                 <div className="flex justify-between items-center text-sm px-1">
-                                    <div className="flex items-center gap-2">
-                                        <Checkbox
-                                            id="remember"
+                                    <div className="flex items-center gap-2 text-[14px] text-[#989898]">
+                                        <input
+                                            type="checkbox"
                                             name="remember"
-                                            className="data-[state=checked]:bg-[#99FF33] data-[state=checked]:border-[#99FF33] hover:cursor-pointer"
+                                            id='remember'
+                                            value="1"
+                                            className="accent-[#99FF33] w-[18px] h-[18px]"
                                         />
                                         <Label htmlFor='remember' className='hover:cursor-pointer'>
                                             ingat saya

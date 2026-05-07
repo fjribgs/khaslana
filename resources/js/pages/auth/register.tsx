@@ -36,9 +36,9 @@ export default function Register() {
             <div className="flex-1 flex items-center justify-center px-6 lg:px-16 py-12 relative">
                 <a
                     href={home().url}
-                    className="absolute top-10 left-6 flex items-center gap-2 text-[#99FF33]"
+                    className="absolute top-10 left-6 flex items-center gap-2 text-[#99FF33] group transition-all duration-300"
                 >
-                    <ArrowLeft className="w-5 h-5" />
+                    <ArrowLeft className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-2" />
                     Beranda
                 </a>
                 <div className="w-full">
@@ -116,7 +116,7 @@ export default function Register() {
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="opacity-60 hover:opacity-100 transition"
+                                            className="opacity-60 hover:opacity-100 transition hover:cursor-pointer"
                                         >
                                             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                         </button>
@@ -135,27 +135,30 @@ export default function Register() {
                                         <button
                                             type="button"
                                             onClick={() => setShowConfirm(!showConfirm)}
-                                            className="opacity-60 hover:opacity-100 transition"
+                                            className="opacity-60 hover:opacity-100 transition hover:cursor-pointer"
                                         >
                                             {showConfirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                         </button>
                                     </div>
                                     <InputError message={errors.password_confirmation} />
                                 </div>
-                                <div className="flex items-center gap-2 px-1 text-[14px] text-[#989898]">
-                                    <input
-                                        type="checkbox"
-                                        name="terms"
-                                        id='terms'
-                                        tabIndex={6}
-                                        className="accent-[#99FF33] w-[18px] h-[18px]"
-                                    />
-                                    <label htmlFor="terms" className='hover:cursor-pointer'>
-                                        Saya setuju terhadap{" "}
-                                        <span className="text-[#99FF33] underline underline-offset-2">
-                                            syarat dan ketentuan
-                                        </span>
-                                    </label>
+                                <div className='flex flex-col gap-1'>
+                                    <div className="flex items-center gap-2 px-1 text-[14px] text-[#989898]">
+                                        <input
+                                            type="checkbox"
+                                            name="terms"
+                                            id='terms'
+                                            tabIndex={6}
+                                            className="accent-[#99FF33] w-[18px] h-[18px]"
+                                        />
+                                        <label htmlFor="terms" className='hover:cursor-pointer'>
+                                            Saya setuju terhadap{" "}
+                                            <span className="text-[#99FF33] underline underline-offset-2">
+                                                syarat dan ketentuan
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <InputError message={errors.terms} />
                                 </div>
                                 <button
                                     type="submit"
