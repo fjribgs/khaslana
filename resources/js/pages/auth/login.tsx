@@ -8,7 +8,7 @@ import TextLink from '@/components/text-link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { register, home } from '@/routes';
+import { register, home, googleAuth } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
@@ -24,6 +24,10 @@ export default function Login({
     canRegister,
 }: Props) {
     const [showPassword, setShowPassword] = React.useState(false);
+
+    const handleGoogleLogin = () => {
+        window.location.href = googleAuth().url;
+    };
 
     return (
         <div className="min-h-screen flex bg-[#1E1B26]">
@@ -65,6 +69,8 @@ export default function Login({
                                         type="text"
                                         name="email"
                                         placeholder="Email"
+                                        tabIndex={1}
+                                        autoFocus
                                         className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-[#A3A3A3]"
                                     />
                                 </div>
@@ -75,6 +81,7 @@ export default function Login({
                                         type={showPassword ? "text" : "password"}
                                         name="password"
                                         placeholder="Password"
+                                        tabIndex={2}
                                         className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-[#A3A3A3]"
                                     />
                                     <button
@@ -92,7 +99,11 @@ export default function Login({
                                 <InputError message={errors.password} />
                                 <div className="flex justify-between items-center text-sm px-1">
                                     <div className="flex items-center gap-2">
-                                        <Checkbox id="remember" name="remember" className="data-[state=checked]:bg-[#99FF33] data-[state=checked]:border-[#99FF33] hover:cursor-pointer" />
+                                        <Checkbox
+                                            id="remember"
+                                            name="remember"
+                                            className="data-[state=checked]:bg-[#99FF33] data-[state=checked]:border-[#99FF33] hover:cursor-pointer"
+                                        />
                                         <Label htmlFor='remember' className='hover:cursor-pointer'>
                                             ingat saya
                                         </Label>
@@ -109,12 +120,14 @@ export default function Login({
                                 <button
                                     type="submit"
                                     disabled={processing}
+                                    tabIndex={3}
                                     className="btn-primary-khaslana hover:cursor-pointer w-full mt-4 py-4 rounded-full text-black hover:text-[#99FF33] font-bold"
                                 >
                                     {processing && <Spinner />}
                                     Masuk
                                 </button>
                                 <button
+                                    onClick={handleGoogleLogin}
                                     type="button"
                                     className="btn-secondary-khaslana hover:cursor-pointer gap-2"
                                 >
