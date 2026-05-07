@@ -41,7 +41,7 @@ return new class extends Migration
 
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->text('profile_photo')->default('default-profile.png');
+            $table->string('profile_photo')->default('default-profile.png');
         });
     }
 
