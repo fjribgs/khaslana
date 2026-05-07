@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
-import locationIcon from "@/assets/images/katalog/location.svg";
-import addToCartIcon from "@/assets/images/katalog/addtocart.svg";
-import starIcon from "@/assets/images/katalog/star.svg";
+import addToCartIcon from "@/assets/images/catalog/addtocart.svg";
+import locationIcon from "@/assets/images/catalog/location.svg";
+import starIcon from "@/assets/images/catalog/star.svg";
 
 interface ProductCardProps {
     name: string;

@@ -1,7 +1,7 @@
-import batikImg from "@/assets/images/katalog/batik solo.png";
-import cartMainIcon from "@/assets/images/katalog/cartmain.svg";
-import cartSideIcon from "@/assets/images/katalog/cartside.svg";
-import sambalImg from "@/assets/images/katalog/sambal.png";
+import batikImg from "@/assets/images/catalog/batik-solo.png";
+import cartMainIcon from "@/assets/images/catalog/cartmain.svg";
+import cartSideIcon from "@/assets/images/catalog/cartside.svg";
+import sambalImg from "@/assets/images/catalog/sambal.png";
 
 export function FeaturedProduct() {
     return (

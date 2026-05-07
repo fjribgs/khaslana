@@ -1,5 +1,5 @@
 
-import searchIcon from "@/assets/images/katalog/search_icon.svg";
+import searchIcon from "@/assets/images/catalog/search-icon.svg";
 
 export function HeroSection() {
     return (
