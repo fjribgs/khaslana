@@ -13,17 +13,17 @@ const socials = [
     {
         name: "Instagram",
         icon: Instagram,
-        link: "#"
+        link: "https://www.instagram.com/khaslana.official"
     },
     {
         name: "Youtube",
         icon: Youtube,
-        link: "#"
+        link: "https://www.youtube.com/@khaslana-official"
     },
     {
         name: "LinkedIn",
         icon: Linkedin,
-        link: "#"
+        link: "https://www.linkedin.com/in/khaslana-corp"
     },
 ];
 
@@ -64,6 +64,7 @@ export default function Footer() {
                                     key={index}
                                     href={item.link}
                                     aria-label={item.name}
+                                    target='_blank'
                                     className="flex items-center justify-center w-9 h-9 rounded-full border border-[#99FF33] hover:bg-[#99FF33] transition group"
                                 >
                                     <img
