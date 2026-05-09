@@ -111,7 +111,7 @@ export default function Navbar() {
                     onClick={handleToggle}
                 />
             </div>
-            <div className="navbar-right">
+            <div className={`navbar-right ${user ? "navbar-right-auth" : ""}`}>
                 <ul className={`
                     ${user ? "navbar-authenticated" : ""}
                     ${user ? "navbar-mobile-auth" : ""}

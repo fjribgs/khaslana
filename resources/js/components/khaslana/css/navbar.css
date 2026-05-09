@@ -49,8 +49,12 @@
 
 .navbar-right {
     display: flex;
-    flex: 1;
     align-items: center;
+    justify-content: flex-end;
+}
+
+.navbar-right.navbar-right-auth {
+    flex: 1;
     justify-content: center;
 }
 
@@ -206,6 +210,16 @@
 
     .navbar-right .btn-primary {
         padding: 16px 26px;
+    }
+}
+
+@media (max-width: 1533px) {
+    .navbar-left {
+        font-size: 24px;
+    }
+
+    .navbar-right ul {
+        font-size: 18px;
     }
 }
 
