@@ -49,6 +49,7 @@
 
 .navbar-right {
     display: flex;
+    flex: 1;
     align-items: center;
     justify-content: center;
 }
@@ -61,6 +62,17 @@
     gap: 25px;
     font-size: 13px;
     font-weight: 500;
+}
+
+.navbar-right ul.navbar-authenticated {
+    position: relative;
+    width: 100%;
+    justify-content: center;
+}
+
+.navbar-right ul.navbar-authenticated li:last-child {
+    position: absolute;
+    right: 0;
 }
 
 .navbar-right .nav-link {
@@ -166,6 +178,34 @@
     width: 28px;
 }
 
+/* additional */
+.navbar-mobile-profile-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 14px;
+}
+
+.navbar-mobile-profile-actions a,
+.navbar-mobile-profile-actions button {
+    color: #989898;
+    text-decoration: none;
+    transition: color 200ms ease;
+}
+
+.navbar-mobile-profile-actions a:hover,
+.navbar-mobile-profile-actions button:hover {
+    color: #99FF33;
+}
+
+.navbar-mobile-profile-actions .logout {
+    color: #ff6b6b;
+}
+
+.navbar-mobile-links {
+    display: none;
+}
+
 @media (min-width: 1533px) {
     .navbar {
         padding: 25px 60px;
@@ -233,6 +273,72 @@
         padding: 25px;
         gap: 20px;
         font-size: 13px;
+    }
+
+    .navbar-right ul.navbar-mobile-auth {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 100%;
+        padding: 25px;
+    }
+
+    .navbar-right ul.navbar-mobile-auth li:not(.navbar-profile-item) {
+        width: fit-content;
+    }
+
+    .navbar-right ul.navbar-mobile-auth .navbar-profile-item {
+        margin-left: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 14px;
+        margin-right: 18px;
+    }
+
+    .chevron-display {
+        display: none;
+    }
+
+    .navbar-dropdown-desktop {
+        display: none;
+    }
+
+    .navbar-mobile-links {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 14px;
+        margin-top: 18px;
+    }
+
+    .navbar-mobile-links .nav-link {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+        color: #989898;
+    }
+
+    .navbar-mobile-links .logout {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+        color: #ff6b6b;
+        background: transparent;
+        border: none;
+        padding: 0;
+        font-size: 13px;
+    }
+
+    .navbar-mobile-links .nav-link:hover {
+        color: #99FF33;
+    }
+
+    .navbar-mobile-links .logout:hover {
+        color: #ff8787;
     }
 
     .navbar.menu-open .navbar-right {
