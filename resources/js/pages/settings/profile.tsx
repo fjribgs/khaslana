@@ -1,17 +1,20 @@
 import { Transition } from '@headlessui/react';
-import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
+import React from 'react';
+import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
+import DefaultProfile from '@/assets/icons/default-profile.png';
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/hooks/use-auth';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import type { BreadcrumbItem } from '@/types';
-import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
+import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -27,7 +30,10 @@ export default function Profile({
     mustVerifyEmail: boolean;
     status?: string;
 }) {
-    const { auth } = usePage().props;
+    const { user } = useAuth();
+    const [preview, setPreview] = React.useState<string | null>(
+        user.profile_photo ?? null
+    );
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -52,17 +58,84 @@ export default function Profile({
                     >
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
+                                <div className="grid gap-4">
+                                    <Label htmlFor="profile_photo">
+                                        Profile photo
+                                    </Label>
+
+                                    <div className="flex items-center gap-5">
+                                        <img
+                                            src={preview ?? DefaultProfile}
+                                            alt={user.name}
+                                            className="
+                                                w-24 h-24
+                                                rounded-full
+                                                object-cover
+                                                border border-border
+                                                shadow-sm
+                                            "
+                                        />
+
+                                        <div className="flex flex-col gap-2">
+                                            <Input
+                                                id="profile_photo"
+                                                type="file"
+                                                name="profile_photo"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    const file =
+                                                        e.target.files?.[0];
+
+                                                    if (file) {
+                                                        setPreview(
+                                                            URL.createObjectURL(file)
+                                                        );
+                                                    }
+                                                }}
+                                                className="cursor-pointer"
+                                            />
+
+                                            <p className="text-sm text-muted-foreground">
+                                                JPG, PNG up to 2MB
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <InputError
+                                        className="mt-2"
+                                        message={errors.profile_photo}
+                                    />
+                                </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="name">Name</Label>
 
                                     <Input
                                         id="name"
                                         className="mt-1 block w-full"
-                                        defaultValue={auth.user.name}
+                                        defaultValue={user.name}
                                         name="name"
                                         required
                                         autoComplete="name"
                                         placeholder="Full name"
+                                    />
+
+                                    <InputError
+                                        className="mt-2"
+                                        message={errors.name}
+                                    />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="username">Username</Label>
+
+                                    <Input
+                                        id="username"
+                                        className="mt-1 block w-full"
+                                        defaultValue={user.username}
+                                        name="username"
+                                        required
+                                        autoComplete="username"
+                                        placeholder="Your username"
                                     />
 
                                     <InputError
@@ -78,7 +151,7 @@ export default function Profile({
                                         id="email"
                                         type="email"
                                         className="mt-1 block w-full"
-                                        defaultValue={auth.user.email}
+                                        defaultValue={user.email}
                                         name="email"
                                         required
                                         autoComplete="username"
@@ -92,7 +165,7 @@ export default function Profile({
                                 </div>
 
                                 {mustVerifyEmail &&
-                                    auth.user.email_verified_at === null && (
+                                    user.email_verified_at === null && (
                                         <div>
                                             <p className="-mt-4 text-sm text-muted-foreground">
                                                 Your email address is
