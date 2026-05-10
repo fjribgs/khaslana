@@ -15,9 +15,24 @@ export default function Register() {
     const [showConfirm, setShowConfirm] = React.useState(false);
     // const [isNamaClicked, setIsNamaClicked] = React.useState(false);
     // const [isUsernameClicked, setIsUsernameClicked] = React.useState(false);
+    const [activeInput, setActiveInput] = React.useState<
+        'name' | 'username' | null
+    >('name');
 
     const handleGoogleRegis = () => {
         window.location.href = googleAuth().url;
+    }
+
+    const handleNameFocused = () => {
+        setActiveInput('name');
+    }
+
+    const handleUsernameFocused = () => {
+        setActiveInput('username');
+    }
+
+    const handleInputBlur = () => {
+        setActiveInput(null);
     }
 
     return (
@@ -64,28 +79,52 @@ export default function Register() {
                         {({ processing, errors }) => (
                             <>
                                 <div className="flex flex-col md:flex-row gap-3.5 w-full">
-                                    <div className='flex flex-1 flex-col gap-1'>
-                                        <div className="flex flex-1 bg-blue items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className={`
+                                        flex flex-col gap-1
+                                        overflow-hidden
+                                        transition-all duration-400
+                                        md:basis-0
+                                        ${
+                                            activeInput === 'name'
+                                                ? 'md:flex-[1.7]'
+                                                : activeInput === 'username'
+                                                    ? 'md:flex-[0.7]'
+                                                    : 'md:flex-1'
+                                        }
+                                    `}>
+                                        <div className="flex flex-1 bg-blue items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-full px-5 py-3 focus-within:border-[#99FF33] transition">
                                             <input
                                                 name="name"
                                                 placeholder="Nama lengkap"
                                                 tabIndex={1}
                                                 autoFocus
-                                                // onFocus={() => setIsNamaClicked(true)}
-                                                // onBlur={() => setIsNamaClicked(false)}
+                                                onFocus={handleNameFocused}
+                                                onBlur={handleInputBlur}
                                                 className="bg-transparent outline-none text-white text-[16px] placeholder:text-[#A3A3A3]"
                                             />
                                         </div>
                                         <InputError message={errors.name} />
                                     </div>
-                                    <div className='flex flex-1 flex-col gap-1'>
-                                        <div className="flex flex-1 bg-red items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className={`
+                                        flex flex-col gap-1
+                                        overflow-hidden
+                                        transition-all duration-400
+                                        md:basis-0
+                                        ${
+                                            activeInput === 'username'
+                                                ? 'md:flex-[1.7]'
+                                                : activeInput === 'name'
+                                                    ? 'md:flex-[0.7]'
+                                                    : 'md:flex-1'
+                                        }
+                                    `}>
+                                        <div className="flex flex-1 bg-red items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-full px-5 py-3 focus-within:border-[#99FF33] transition">
                                             <input
                                                 name="username"
                                                 placeholder="Username"
                                                 tabIndex={2}
-                                                // onFocus={() => setIsUsernameClicked(true)}
-                                                // onBlur={() => setIsUsernameClicked(false)}
+                                                onFocus={handleUsernameFocused}
+                                                onBlur={handleInputBlur}
                                                 className="bg-transparent outline-none text-white text-[16px] placeholder:text-[#A3A3A3]"
                                             />
                                         </div>
@@ -93,7 +132,7 @@ export default function Register() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-full px-5 py-3 focus-within:border-[#99FF33] transition">
                                         <input
                                             name="email"
                                             type="email"
@@ -105,7 +144,7 @@ export default function Register() {
                                     <InputError message={errors.email} />
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-full px-5 py-3 focus-within:border-[#99FF33] transition">
                                         <input
                                             name="password"
                                             type={showPassword ? "text" : "password"}
@@ -124,7 +163,7 @@ export default function Register() {
                                     <InputError message={errors.password} />
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-[16px] px-5 py-3 focus-within:border-[#99FF33] transition">
+                                    <div className="flex items-center gap-3 bg-[#322F39] border border-[#3A3845] rounded-full px-5 py-3 focus-within:border-[#99FF33] transition">
                                         <input
                                             name="password_confirmation"
                                             type={showConfirm ? "text" : "password"}
