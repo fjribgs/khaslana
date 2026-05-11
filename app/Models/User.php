@@ -64,6 +64,12 @@ class User extends Authenticatable
         ];
     }
 
+    protected $with = ['profile'];
+
+    public function profile() {
+        return $this->hasOne(UserProfile::class, 'user_id', 'id');
+    }
+
     public function umkm() {
         return $this->hasOne(Umkm::class);
     }
