@@ -13,8 +13,6 @@ import { store } from '@/routes/register';
 export default function Register() {
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirm, setShowConfirm] = React.useState(false);
-    // const [isNamaClicked, setIsNamaClicked] = React.useState(false);
-    // const [isUsernameClicked, setIsUsernameClicked] = React.useState(false);
     const [activeInput, setActiveInput] = React.useState<
         'name' | 'username' | null
     >('name');
