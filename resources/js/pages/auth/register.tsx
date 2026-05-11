@@ -1,5 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
-import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ChevronLeft } from 'lucide-react';
 import React from 'react';
 
 import Google from '@/assets/icons/login/google.svg';
@@ -53,7 +53,7 @@ export default function Register() {
                     href={home().url}
                     className="absolute top-10 left-6 flex items-center gap-2 text-[#99FF33] group transition-all duration-300"
                 >
-                    <ArrowLeft className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-2" />
+                    <ChevronLeft className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-2" />
                     Beranda
                 </a>
                 <div className="w-full">
