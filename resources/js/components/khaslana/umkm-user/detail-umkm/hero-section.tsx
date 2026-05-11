@@ -1,0 +1,103 @@
+import {
+    MessageCircle,
+    MapPin,
+    Star,
+} from "lucide-react";
+import CafeImage from "@/assets/images/umkm-user/default-store.png";
+
+type Category = {
+    name: string;
+}
+
+export default function HeroSection() {
+    const categories: Category[] = [
+        {
+            name: 'Minuman',
+        },
+        {
+            name: 'Makanan',
+        },
+    ];
+
+    return (
+        <section className="flex flex-col lg:flex-row items-center lg:items-end justify-center lg:justify-between gap-10 lg:gap-16 w-full">
+            <div className="flex flex-col flex-1 w-full">
+                <div className="flex items-center gap-3">
+                    {categories.map((category) => (
+                        <span className="rounded-full bg-[#2F3E1F] px-4 py-1.5 text-[10px] md:text-[11px] font-medium uppercase tracking-wider text-[#99FF33]">
+                            {category.name}
+                        </span>
+                    ))}
+                </div>
+                <h1 className="mt-6 text-white text-5xl md:text-7xl tracking-wider font-bold leading-[1.05]">
+                    Cafe Mas Gatot Gatot
+                </h1>
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mt-4 text-[#D1D1D1]">
+                    <div className="flex items-center gap-1">
+                        <Star className="pb-1 w-6 md:w-7 h-6 md:h-7 fill-[#99FF33] text-[#99FF33]" />
+                        <span className="text-xl md:text-2xl font-semibold text-white me-1">
+                            4.8
+                        </span>
+                        <span className="text-sm md:text-base text-[#989898]">
+                            (240+ Ulasan)
+                        </span>
+                    </div>
+                    <div className="w-px h-6 md:h-7 bg-white/20" />
+                    <div className="flex items-center gap-2">
+                        <MapPin className="pb-1 w-5 md:w-6 h-5 md:h-6" />
+                        <span className="text-sm md:text-base text-[#B7B7B7]">
+                            Jl. Pajajaran No. 12,
+                            Bandung, ID
+                        </span>
+                    </div>
+                </div>
+                <div className="mt-8">
+                    <button className="btn-primary-khaslana text-sm md:text-base hover:cursor-pointer gap-2">
+                        <MessageCircle className="pb-0.5 w-5 md:w-6 h-5 md:h-6" />
+                        Hubungi Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <div className="relative w-full max-w-[500px]">
+                <div className="overflow-hidden rounded-[32px] border border-white/10">
+                    <img
+                        src={CafeImage}
+                        alt="Cafe"
+                        className="max-h-[400px] w-full object-cover"
+                    />
+                    <div
+                        className="
+                            absolute inset-0
+                            bg-gradient-to-t
+                            from-black/80
+                            via-black/20
+                            to-transparent
+                            rounded-[32px]
+                        "
+                    />
+                </div>
+                <div className="absolute bottom-5 left-5 flex flex-col gap-2">
+                    <div
+                        className="
+                            flex items-center gap-2
+                            w-fit
+                            rounded-full
+                            bg-[#2F3E1F]/90
+                            px-3 py-1.5
+                            backdrop-blur-md
+                        "
+                    >
+                        <span className="text-[10px] lg:text-[10.5px] font-bold uppercase tracking-wider text-[#99FF33]">
+                            Sedang Buka
+                        </span>
+                        <div className="w-2.5 h-2.5 rounded-full bg-[#99FF33]" />
+                    </div>
+                    <span className="text-white text-2xl font-medium">
+                        08:00 — 22:00 WIB
+                    </span>
+                </div>
+            </div>
+        </section>
+    );
+}

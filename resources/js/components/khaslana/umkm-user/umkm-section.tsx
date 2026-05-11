@@ -5,6 +5,7 @@ import {
     Star,
 } from 'lucide-react';
 import DefaultStore from '@/assets/images/umkm-user/default-store.png';
+import { detail } from '@/routes/umkm';
 
 type Umkm = {
     id: number;
@@ -20,6 +21,9 @@ type Umkm = {
 };
 
 export default function UmkmSection() {
+    const handleCardClicked = () => {
+        window.location.href = detail().url;
+    }
     const umkms: Umkm[] = [
         {
             id: 1,
@@ -79,7 +83,7 @@ export default function UmkmSection() {
     ];
 
     return (
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap:8 mb-12 w-full">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap:8 mb-12 w-full" onClick={handleCardClicked}>
             {umkms.map((umkm) => (
                 <div
                     key={umkm.id}
