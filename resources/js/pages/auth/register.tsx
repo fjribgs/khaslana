@@ -42,7 +42,7 @@ export default function Register() {
                 <div className="flex flex-col items-center gap-3">
                     <img
                         src={KhaslanaLogo}
-                        className="w-[360px]"
+                        className="w-90"
                     />
                     <p className="text-white font-bold pt-8 text-6xl">Khaslana</p>
                 </div>

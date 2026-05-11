@@ -35,39 +35,39 @@ export default function AboutIndex() {
                 <div className="visi-right flex flex-col gap-5 lg:mr-10">
                     {/* Visi */}
                     <div className="visi-section flex flex-col gap-5">
-                        <span className="text-[#99FF33] font-semibold text-[12px] tracking-[5px]">
+                        <span className="text-[#99FF33] font-semibold text-[14px] tracking-[5px]">
                             VISI KAMI
                         </span>
-                        <h2 className="text-white font-medium text-xl">
+                        <h2 className="text-white font-medium text-2xl">
                             Menjadi platform ekosistem UMKM terpercaya yang menghubungkan produk lokal Indonesia ke pasar yang lebih luas.
                         </h2>
-                        <p className="text-[#ADAAAA]">
+                        <p className="text-[#ADAAAA] text-xl">
                             Kami percaya bahwa setiap warung, bengkel, dan pengrajin lokal berhak mendapatkan akses untuk menjangkau pasar tanpa kehilangan identitas mereka.
                         </p>
                     </div>
 
                     <div className="misi-section flex flex-col gap-5 bg-[#262626] p-5 px-6.25 rounded-[15px]">
-                        <span className="text-[#99FF33] font-semibold text-[12px] tracking-[5px]">
+                        <span className="text-[#99FF33] font-semibold text-[14px] tracking-[5px]">
                             MISI KAMI
                         </span>
 
-                        <div className="misi flex gap-2 items-start">
+                        <div className="misi flex gap-5 items-center">
                             <img src={Misi} alt="" className="shrink-0" />
-                            <p className="misi-text text-white text-sm">
+                            <p className="misi-text text-white text-lg">
                                 Memperluas akses UMKM ke pembeli, mitra, dan sumber daya yang sebelumnya sulit dijangkau.
                             </p>
                         </div>
 
-                        <div className="misi flex gap-2 items-start">
+                        <div className="misi flex gap-5 items-center">
                             <img src={Misi} alt="" className="shrink-0" />
-                            <p className="misi-text text-white text-sm">
+                            <p className="misi-text text-white text-lg">
                                 Menyediakan platform yang memudahkan UMKM mengelola usaha, mulai dari pencatatan hingga pemasaran digital.
                             </p>
                         </div>
 
-                        <div className="misi flex gap-2 items-start">
+                        <div className="misi flex gap-5 items-center">
                             <img src={Misi} alt="" className="shrink-0" />
-                            <p className="misi-text text-white text-sm">
+                            <p className="misi-text text-white text-lg">
                                 Mendampingi UMKM dalam adopsi teknologi secara bertahap sesuai kebutuhan dan kapasitas mereka.
                             </p>
                         </div>
