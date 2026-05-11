@@ -45,7 +45,7 @@ Route::controller(CommunityController::class)->group(function() {
 
 Route::controller(UmkmController::class)->group(function() {
     Route::get('/umkm', 'index')->name('umkm');
-    Route::get('/umkm/detail', 'detail')->name('umkm.detail');
+    Route::get('/umkm/detail/{umkm_id}', 'detail')->name('umkm.detail');
     Route::get('/umkm/products', 'umkmProducts')->name('umkm.products');
 });
 

@@ -10,6 +10,7 @@ class UserProfile extends Model
     protected $fillable = [
         'user_id',
         'profile_photo',
+        'logo',
     ];
 
     public $timestamps = false;

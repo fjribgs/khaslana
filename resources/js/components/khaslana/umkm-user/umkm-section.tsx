@@ -1,3 +1,4 @@
+import { router } from '@inertiajs/react';
 import {
     ArrowRight,
     Heart,
@@ -21,9 +22,6 @@ type Umkm = {
 };
 
 export default function UmkmSection() {
-    const handleCardClicked = () => {
-        window.location.href = detail().url;
-    }
     const umkms: Umkm[] = [
         {
             id: 1,
@@ -82,8 +80,12 @@ export default function UmkmSection() {
         },
     ];
 
+    const handleCardClicked = (umkm: Umkm) => {
+        router.visit(detail(umkm.id));
+    }
+
     return (
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap:8 mb-12 w-full" onClick={handleCardClicked}>
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap:8 mb-12 w-full">
             {umkms.map((umkm) => (
                 <div
                     key={umkm.id}
@@ -98,6 +100,7 @@ export default function UmkmSection() {
                         hover:-translate-y-1
                         hover:shadow-[0_10px_40px_rgba(153,255,51,0.08)]
                     "
+                    onClick={() => handleCardClicked(umkm)}
                 >
                     {/* image */}
                     <div className="relative h-[220px] overflow-hidden">
