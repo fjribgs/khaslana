@@ -30,7 +30,7 @@ const products = [
 export default function UmkmSection() {
     return (
         <section className="flex flex-col items-center justify-center min-h-screen h-auto py-5 mb-10 px-13.75 gap-7.5">
-            <h2 className='font-medium text-[40px] text-center mb-12 text-white'>
+            <h2 className='font-medium text-[40px] text-center mb-12 px-4 text-white'>
                 Bersama Kami Menjadi Gerbang Digital{" "}
                 <span className='text-[#99ff33]'>
                     UMKM Indonesia

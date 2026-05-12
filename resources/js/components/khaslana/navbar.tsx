@@ -39,24 +39,24 @@ export default function Navbar() {
         ];
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target as Node)
-            ) {
-                setProfileOpen(false);
-                setMenuOpen(false);
-            }
-        }
-        document.addEventListener(
-            'mousedown',
-            handleClickOutside
-        );
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    // useEffect(() => {
+    //     function handleClickOutside(event: MouseEvent) {
+    //         // if (
+    //         //     dropdownRef.current &&
+    //         //     !dropdownRef.current.contains(event.target as Node)
+    //         // ) {
+    //         //     setProfileOpen(false);
+    //         //     setMenuOpen(false);
+    //         // }
+    //     }
+    //     document.addEventListener(
+    //         'mousedown',
+    //         handleClickOutside
+    //     );
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClickOutside);
+    //     };
+    // }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -111,11 +111,11 @@ export default function Navbar() {
                     onClick={handleToggle}
                 />
             </div>
-            <div className={`navbar-right ${user ? "navbar-right-auth" : ""}`}>
+            <div className={`flex justify-center items-center w-full navbar-right ${user ? "navbar-right-auth" : ""}`}>
                 <ul className={`
                     ${user ? "navbar-authenticated" : ""}
                     ${user ? "navbar-mobile-auth" : ""}
-                `}>
+                    `}>
                     {menus.map((menu) => (
                         <li key={menu.name}>
                             <Link
@@ -231,7 +231,7 @@ export default function Navbar() {
                                                 className="
                                                     navbar-dropdown-desktop
                                                     absolute right-0 mt-3
-                                                    min-w-[220px]
+                                                    min-w-55
                                                     rounded-2xl
                                                     bg-[#1F1D2B]/95
                                                     backdrop-blur-xl
