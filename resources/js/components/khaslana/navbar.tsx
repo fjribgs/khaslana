@@ -39,24 +39,24 @@ export default function Navbar() {
         ];
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // useEffect(() => {
-    //     function handleClickOutside(event: MouseEvent) {
-    //         // if (
-    //         //     dropdownRef.current &&
-    //         //     !dropdownRef.current.contains(event.target as Node)
-    //         // ) {
-    //         //     setProfileOpen(false);
-    //         //     setMenuOpen(false);
-    //         // }
-    //     }
-    //     document.addEventListener(
-    //         'mousedown',
-    //         handleClickOutside
-    //     );
-    //     return () => {
-    //         document.removeEventListener('mousedown', handleClickOutside);
-    //     };
-    // }, []);
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
+                setProfileOpen(false);
+                setMenuOpen(false);
+            }
+        }
+        document.addEventListener(
+            'click',
+            handleClickOutside
+        );
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
