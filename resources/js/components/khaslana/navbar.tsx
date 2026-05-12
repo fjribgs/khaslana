@@ -50,11 +50,11 @@ export default function Navbar() {
             }
         }
         document.addEventListener(
-            'mousedown',
+            'click',
             handleClickOutside
         );
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('click', handleClickOutside);
         };
     }, []);
 
