@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UmkmController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,6 +32,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // product routes
     Route::controller(ProductController::class)->group(function() {
         Route::get('/product', 'index')->name('product');
+    });
+
+    // store management
+    Route::controller(StoreController::class)->group(function() {
+        Route::get('/store', 'index')->name('store');
     });
 });
 
