@@ -15,6 +15,7 @@ import {
     community,
     about,
     umkm,
+    dashboard,
 } from "@/routes";
 import { logout } from '@/routes';
 
@@ -30,6 +31,9 @@ export default function Navbar() {
             { name: "UMKM", href: umkm().url },
             { name: "Katalog", href: catalog().url },
             { name: "Komunitas", href: community().url },
+            ...(user.is_umkm
+                ? [{ name: "Kelola Toko", href: dashboard().url }]
+                : []),
         ]
         : [
             { name: "UMKM", href: umkm().url },
