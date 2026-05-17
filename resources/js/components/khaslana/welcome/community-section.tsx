@@ -38,7 +38,7 @@ export default function CommunitySection() {
                     </a>
                 </div>
             </div>
-            <div className="flex flex-1 relative z-10 w-full h-[400px] lg:h-auto">
+            <div className="flex flex-1 relative z-0 w-full h-[400px] lg:h-auto">
                 <div className="relative w-full h-full">
                     <img
                         src={CommunityImg}
@@ -46,7 +46,7 @@ export default function CommunitySection() {
                         className="
                             absolute 
                             top-1/2 
-                            -translate-y-1/2 
+                            -translate-y-1/2 -z-10
                             left-[-280px] sm:left-[-320px] md:left-[0] lg:left-[-380px] 
                             w-[800px] lg:w-[1400px]
                             max-w-none
