@@ -1,13 +1,13 @@
 export default function CommunityIndex() {
     return (
-        <div className="flex flex-col items-center pt-28 px-[55px] lg:justify-center">
-            <section className="community-header flex flex-col w-full pt-8 pb-[40px] gap-2">
-                <h2 className="text-[#99ff33] font-medium text-4xl">Terhubung, Berkolaborasi, dan Berdaya Bersama.</h2>
-                <p className="text-[#adaaaa] font-light text-[16.5px]">Bagikan perjalanan bisnismu, temukan solusi bersama, dan tumbuh lebih kuat dalam ekosistem komunitas Khaslana</p>
+        <div className="flex flex-col items-center pt-28 max-md:pt-18 px-4 sm:px-8 lg:px-[55px] w-full">
+            <section className="community-header flex flex-col w-full pt-8 pb-[40px] max-md:pb-5 gap-2">
+                <h2 className="text-[#99ff33] font-medium text-4xl max-md:text-2xl">Terhubung, Berkolaborasi, dan Berdaya Bersama.</h2>
+                <p className="text-[#adaaaa] font-light text-[16.5px] max-md:text-md">Bagikan perjalanan bisnismu, temukan solusi bersama, dan tumbuh lebih kuat dalam ekosistem komunitas Khaslana</p>
             </section>
             
-            <div className="community-container flex justify-between gap-5 h-auto min-h-screen py-5 border-box">
-                <div className="posts flex flex-col gap-5 w-auto flex-3 min-w-0">
+            <div className="community-container flex flex-wrap justify-between gap-5 h-auto min-h-screen py-5 border-box">
+                <div className="posts w-full flex flex-col gap-5">
                     <div className="create-post bg-[#222] p-5 rounded-[15px]">
                         <div className="post-top flex items-center gap-3.75">
                             <img src="./../../../assets/komunitas/user-avatar.png" alt="Profile" className="avatar" />
@@ -17,17 +17,17 @@ export default function CommunityIndex() {
                         <div className="post-bottom flex justify-between items-center">
                             <div className="post-options flex gap-3.75">
                                 <label className="opt-btn bg-transparent border-0 text-[#888] cursor-pointer flex items-center gap-1.75 text-[12px]">
-                                    <input type="file" accept="image/*" />
+                                    <input type="file" className="hidden" accept="image/*" />
                                     <img src="./../../../assets/komunitas/gambar.svg" alt="" /> Gambar
                                 </label>
 
                                 <label className="opt-btn bg-transparent border-0 text-[#888] cursor-pointer flex items-center gap-1.75 text-[12px]">
-                                    <input type="file" accept="video/*" />
+                                    <input type="file" className="hidden" accept="video/*" />
                                     <img src="./../../../assets/komunitas/video.svg" alt="" /> Video
                                 </label>
 
                                 <label className="opt-btn bg-transparent border-0 text-[#888] cursor-pointer flex items-center gap-1.75 text-[12px]">
-                                    <input type="file" accept=".pdf,.doc,.docx" />
+                                    <input type="file" className="hidden" accept=".pdf,.doc,.docx" />
                                     <img src="./../../../assets/komunitas/artikel.svg" alt="" /> Artikel
                                 </label>
                             </div>
@@ -71,30 +71,6 @@ export default function CommunityIndex() {
                         </div>
                     ))}
                 </div>
-
-                <aside className="topic-contributor flex flex-col gap-5">
-                    <div className="topic-card flex flex-col gap-2.25 bg-[#262626] py-5 px-2.25 rounded-xl min-w-50 w-auto">
-                        <div className="topic-header py-0 px-2.25 flex gap-2.25 items-center">
-                            <img src="./../../../assets/komunitas/topik.svg" alt="" />
-                            <p className="text-white">Topik Populer</p>
-                        </div>
-
-                        <a href="#" className="topic-btn flex flex-col gap-1 p-2.25 rounded-md transition-all duration-200 cursor-pointer hover:bg-[#3e3e3e]">
-                            <h5 className="font-light text-[#99ff33]">#DIGITALMARKETING</h5>
-                            <p className="text-[#adaaaa] text-[12px]">1.2K Postingan minggu ini</p>
-                        </a>
-
-                        <a href="#" className="topic-btn flex flex-col gap-1 p-2.25 rounded-md transition-all duration-200 cursor-pointer hover:bg-[#3e3e3e]">
-                            <h5 className="font-light text-[#99ff33]">#SUBSIDIPEMERINTAH</h5>
-                            <p className="text-[#adaaaa] text-[12px]">700 Postingan minggu ini</p>
-                        </a>
-
-                        <a href="#" className="topic-btn flex flex-col gap-1 p-2.25 rounded-md transition-all duration-200 cursor-pointer hover:bg-[#3e3e3e]">
-                            <h5 className="font-light text-[#99ff33]">#SCALEUPINDO</h5>
-                            <p className="text-[#adaaaa] text-[12px]">430 Postingan minggu ini</p>
-                        </a>
-                    </div>
-                </aside>
             </div>
         </div>
     );
