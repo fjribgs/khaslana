@@ -89,16 +89,16 @@ export default function ProductIndex({
                                             }
                                             alt={product.name}
                                             className="
-                                                w-16 h-16
+                                                w-16 h-16 bg-white
                                                 rounded-lg object-cover
-                                                border border-[#99FF33]/30
+                                                border-2 border-[#99FF33]
                                             "
                                         />
                                     </td>
-                                    <td className="p-4 font-medium text-sm md:text-base">
+                                    <td className="p-4 font-medium text-sm md:text-base break-words">
                                         {product.name}
                                     </td>
-                                    <td className="p-4 text-xs md:text-sm text-muted-foreground max-w-xs">
+                                    <td className="p-4 text-xs md:text-sm text-muted-foreground max-w-xs break-words">
                                         {truncateText(product.description)}
                                     </td>
                                     <td className="p-4 text-sm md:text-base">

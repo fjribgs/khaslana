@@ -99,10 +99,20 @@ export default function ListIndex({
                             ? orderRoute(order.id).url
                             : show(order.id).url
                         }
-                        className="flex max-md:flex-col gap-6 bg-[#131313] p-8 rounded-3xl justify-between duration-200 transition-all hover:bg-[#222] hover:-translate-y-1"
+                        className="
+                            flex flex-col md:flex-row
+                            gap-5
+                            bg-[#131313]
+                            p-5 md:p-8
+                            rounded-3xl
+                            justify-between
+                            transition-all duration-200
+                            hover:bg-[#222]
+                            hover:-translate-y-0.5
+                        "
                     >
-                        <div className="flex gap-5">
-                            <div className="flex">
+                        <div className="flex gap-4 min-w-0 w-full">
+                            <div className="w-28 h-28 md:w-36 md:h-36 shrink-0">
                                 <img
                                     src={
                                         order.order_items?.[0].product?.product_images?.[0]?.image
@@ -110,43 +120,76 @@ export default function ListIndex({
                                             : '/images/placeholder.png'
                                     }
                                     alt={order.order_items?.[0].product_name}
-                                    className="h-35 w-100 aspect-square max-md:h-15 max-md:w-15 object-cover bg-white rounded-xl"
+                                    className="w-full h-full rounded-xl object-cover bg-white"
                                 />
                             </div>
-                            <div className="flex flex-col gap-2 justify-between">
-                                <div className="flex flex-col gap-1">
-                                    <h5 className="font-semibold text-2xl max-md:text-lg">{order.order_items?.[0].product_name}</h5>
-                                    <span className="flex flex-col gap-0.5 max-md:text-sm text-[#adaaaa] whitespace-nowrap">
-                                        {order.order_items?.[0].variant_detail}
-                                        <span className="text-white whitespace-nowrap">Kuantitas: {order.order_items?.[0].quantity} unit</span>
+                            <div className="flex flex-col justify-between min-w-0">
+                                <div className="space-y-1 min-w-0">
+                                    <h5 className="font-semibold text-lg md:text-2xl break-words">
+                                        {order.order_items?.[0].product_name}
+                                    </h5>
+                                    <span className="flex flex-col text-sm text-[#adaaaa]">
+                                        <span className="break-words line-clamp-2">
+                                            {order.order_items?.[0].variant_detail}
+                                        </span>
+                                        <span className="text-white">
+                                            Kuantitas: {order.order_items?.[0].quantity} unit
+                                        </span>
                                     </span>
                                 </div>
-                                <div className="w-fit">
+                                <div className="w-fit mt-2">
                                     {renderStatusBubble(order.status)}
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col w-full items-end max-md:gap-3 justify-between">
-                            <div className="flex flex-col items-end">
+                        <div className="flex flex-col w-full md:items-end md:justify-between">
+                            <div className="flex flex-col md:items-end">
                                 <span className="text-[#adaaaa] font-medium text-sm">
                                     Total Belanja
                                 </span>
-                                <span className="text-[#99ff33] font-bold text-3xl max-md:text-2xl">
+                                <span className="text-[#99ff33] font-bold text-2xl md:text-3xl break-words">
                                     {formatRupiah(order.total_price)}
                                 </span>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                                 <a
                                     href={order.status === 'TERTUNDA'
                                         ? orderRoute(order.id).url
                                         : show(order.id).url
                                     }
-                                    className="flex border border-[#99ff33] justify-center text-[#99ff33] px-4.5 font-semibold py-2 rounded-[999px] text-sm hover:text-black hover:bg-[#99ff33] duration-200 transition-all">
+                                    className="
+                                        flex justify-center
+                                        border border-[#99ff33]
+                                        text-[#99ff33]
+                                        px-4 py-2
+                                        rounded-full mt-2
+                                        text-sm font-semibold
+                                        hover:text-black
+                                        hover:bg-[#99ff33]
+                                        transition-all duration-200
+                                    "
+                                >
                                     Lihat Detail
                                 </a>
                                 {(order.status == 'SIAP DIAMBIL' || order.status == 'DIKIRIM') && (
-                                    <button onClick={(e) => handleCompleteOrder(e, order.id)}
-                                        className="flex border border-[#99ff33] justify-center hover:text-[#99ff33] px-4.5 font-semibold py-2 rounded-[999px] text-sm text-black bg-[#99ff33] hover:bg-transparent duration-200 transition-all cursor-pointer">
+                                    <button
+                                        onClick={(e) =>
+                                            handleCompleteOrder(e, order.id)
+                                        }
+                                        className="
+                                            flex justify-center
+                                            border border-[#99ff33]
+                                            bg-[#99ff33]
+                                            text-black
+                                            px-4 py-2
+                                            rounded-full
+                                            text-sm font-semibold
+                                            hover:bg-transparent
+                                            hover:text-[#99ff33]
+                                            transition-all duration-200
+                                            cursor-pointer
+                                        "
+                                    >
                                         Selesai
                                     </button>
                                 )}

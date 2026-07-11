@@ -5,6 +5,7 @@ import { useState, type ChangeEvent } from "react";
 import ProfileIcon from "@/assets/icons/default-profile.png";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
+import { showErrorToast } from "@/lib/toast";
 
 export function CreatePost() {
     const { user } = useAuth();
@@ -45,35 +46,40 @@ export function CreatePost() {
     }
 
     const handlePublish = () => {
-            if (!content.trim() && !mediaFile) {
-                alert("Postingan tidak boleh kosong")
-                return;
-            }
-    
-            router.post("/community", {
-                content: content,
-                images: mediaFile ? [mediaFile] : [],
-            }, {
-                forceFormData: true,
-                onSuccess: () => {
-                    setContent("");
-                    setMediaFile(null);
-                    if (previewUrl) {
-                        URL.revokeObjectURL(previewUrl);
-                        setPreviewUrl(null);
-                    }
-    
-                    setIsUploaded(true);
-    
-                    setTimeout(() => {
-                        setIsUploaded(false);
-                        router.visit("/community", {
-                            preserveScroll: false
-                        })
-                    }, 3000);
-                }
-            });
+        if (!content.trim() && !mediaFile) {
+            showErrorToast("Postingan tidak boleh kosong");
+            return;
         }
+
+        if (!content.trim()) {
+            showErrorToast('Postingan harus memiliki teks');
+            return;
+        }
+
+        router.post("/community", {
+            content: content,
+            images: mediaFile ? [mediaFile] : [],
+        }, {
+            forceFormData: true,
+            onSuccess: () => {
+                setContent("");
+                setMediaFile(null);
+                if (previewUrl) {
+                    URL.revokeObjectURL(previewUrl);
+                    setPreviewUrl(null);
+                }
+
+                setIsUploaded(true);
+
+                setTimeout(() => {
+                    setIsUploaded(false);
+                    router.visit("/community", {
+                        preserveScroll: false
+                    })
+                }, 3000);
+            }
+        });
+    }
 
     return (
         <div className="flex flex-col w-full mx-auto">
@@ -87,12 +93,12 @@ export function CreatePost() {
                 <div className="w-full bg-[#99FF33]/20 border border-[#99FF33] text-[#99FF33] p-4 rounded-[15px] text-sm font-medium">Postingan berhasil diupload!</div>
             )}
 
-            <div className="flex flex-col w-full bg-[#222] md:p-8 gap-10 rounded-[15px] mb-20">
+            <div className="flex flex-col w-full bg-[#222] md:p-8 gap-4 rounded-[15px] mb-20">
                 <div className="flex items-start gap-3.75">
                     <img
                         src={user.profile_photo ?? ProfileIcon}
                         alt="Profile"
-                        className="w-12 aspect-square border border-white/10 rounded-full max-md:w-8"
+                        className="w-12 aspect-square border border-white/10 rounded-full max-md:w-8 object-cover"
                     />
                     <Textarea
                         placeholder="Bagikan strategi pertumbuhan Anda hari ini..."
@@ -106,10 +112,23 @@ export function CreatePost() {
                             focus-visible:border-b-[#99FF33]/50
                             transition-colors duration-200
                         "
-                        value={content} 
+                        value={content}
                         onChange={(e) => setContent(e.target.value)}
+                        maxLength={1000}
                         autoFocus
                     />
+                </div>
+                <div className="flex justify-end mb-8">
+                    <span
+                        className={`
+                            text-xs
+                            ${content.length >= 1000
+                                ? "text-red-400"
+                                : "text-white/40"}
+                        `}
+                    >
+                        {content.length}/1000
+                    </span>
                 </div>
 
                 {previewUrl && (

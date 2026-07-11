@@ -11,6 +11,7 @@ import { community } from '@/routes';
 import { like, destroy, show } from "@/routes/community";
 import type { BreadcrumbItem } from '@/types';
 import type { Post } from '@/types/post';
+import { Textarea } from '@/components/ui/textarea';
 
 interface DetailProps {
     post: Post;
@@ -38,6 +39,10 @@ export default function DetailPost({
     const [commentText, setCommentText] = useState('');
     const [isUploaded, setIsUploaded] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isDeleteCommentOpen, setIsDeleteCommentOpen] = useState(false);
+    const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
+    const [expandedReviews, setExpandedReviews] = useState<Set<number>>(new Set());
+    const [clampedReviews, setClampedReviews] = useState<Set<number>>(new Set());
 
     const handleLike = (postId: number, is_liked: boolean) => {
         router.post(like(postId).url, {}, {
@@ -45,6 +50,8 @@ export default function DetailPost({
             onSuccess: () => {
                 if(!is_liked) {
                     showSuccessToast("Berhasil menyukai postingan");
+                } else {
+                    showSuccessToast("Sukai postingan berhasil dihapus");
                 }
             },
             onError: (err) => {
@@ -69,6 +76,11 @@ export default function DetailPost({
 
     const openDeleteDialog = () => {
         setIsDeleteDialogOpen(true);
+    };
+
+    const openCommentDialog = (commentId: number) => {
+        setSelectedCommentId(commentId);
+        setIsDeleteCommentOpen(true);
     };
 
     const handleSubmitComment = () => {
@@ -99,28 +111,87 @@ export default function DetailPost({
         setCommentText('');
     }
 
-    const handleDeleteComment = (commentId: number, postId: number) => {
-        if (confirm('Yakin ingin menghapus komentar ini?')) {
-            router.delete(`/community/${postId}/comment/${commentId}`);
-        }
-    }
+    const handleDeleteComment = () => {
+        if (!selectedCommentId) return;
 
-    const handleLikeComment = (postId: number, commentId: number) => {
+        router.delete(
+            `/community/${post.id}/comment/${selectedCommentId}`,
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    showSuccessToast("Komentar berhasil dihapus");
+                    setIsDeleteCommentOpen(false);
+                    setSelectedCommentId(null);
+                },
+                onError: () => {
+                    showErrorToast("Gagal menghapus komentar");
+                },
+            }
+        );
+    };
+
+    const handleLikeComment = (postId: number, commentId: number, is_liked: boolean) => {
         router.post(`/community/${postId}/comment/${commentId}/like`, {}, {
             preserveScroll: true,
             onSuccess: () => {
                 console.log("Toggle like comment sukses!");
+                if (!is_liked) {
+                    showSuccessToast('Komentar berhasil disukai!');
+                } else {
+                    showSuccessToast('Sukai komentar berhasil dihapus!');
+                }
             },
             onError: (err) => {
                 console.error("Gagal melakukan like comment: ", err);
+                showErrorToast('Gagal menyukai komentar!');
             }
         })
-    }
+    };
 
     if (isUploaded) {
         showSuccessToast('Selamat! Komentar Anda berhasil di upload!!!');
         setIsUploaded(false);
-    }
+    };
+
+    const toggleReview = (reviewId: number) => {
+        setExpandedReviews((prev) => {
+            const next = new Set(prev);
+
+            if (next.has(reviewId)) {
+                next.delete(reviewId);
+            } else {
+                next.add(reviewId);
+            }
+
+            return next;
+        });
+    };
+
+    const checkClamped = (
+        el: HTMLDivElement | null,
+        reviewId: number
+    ) => {
+        if (!el) return;
+
+        const isClamped = el.scrollHeight > el.clientHeight;
+
+        setClampedReviews((prev) => {
+            const alreadyClamped = prev.has(reviewId);
+
+            if (alreadyClamped === isClamped) {
+                return prev;
+            }
+
+            const next = new Set(prev);
+
+            if (isClamped) {
+                next.add(reviewId);
+            } else {
+                next.delete(reviewId);
+            }
+            return next;
+        });
+    };
 
     return (
         <UnusedNavLayout backHref={community().url} breadcrumbs={breadcrumbs}>
@@ -178,9 +249,46 @@ export default function DetailPost({
                             )}
                         </div>
                         <div className="post-content flex flex-col gap-5 ps-3 text-[#adaaaa] font-normal">
-                            <p className="text-sm md:text-base text-white whitespace-pre-line">
-                                {post.content}
-                            </p>
+                            <div>
+                                <div
+                                    ref={(el) => checkClamped(el, post.id)}
+                                    className={`
+                                        whitespace-pre-wrap
+                                        break-words
+                                        overflow-hidden
+                                        text-white
+                                        ${
+                                            expandedReviews.has(post.id)
+                                                ? ''
+                                                : 'line-clamp-2'
+                                        }
+                                    `}
+                                >
+                                    {post.content}
+                                </div>
+
+                                {(clampedReviews.has(post.id) ||
+                                    expandedReviews.has(post.id)) && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            toggleReview(post.id)
+                                        }}
+                                        className="
+                                            mt-2
+                                            text-[#99FF33]
+                                            text-sm
+                                            font-medium
+                                            hover:underline
+                                            cursor-pointer
+                                        "
+                                    >
+                                        {expandedReviews.has(post.id)
+                                            ? 'Tampilkan lebih sedikit'
+                                            : 'Selengkapnya'}
+                                    </button>
+                                )}
+                            </div>
                             {post.post_images && post.post_images.map((imgData) => (
                                 <img 
                                     key={imgData.id}
@@ -269,19 +377,44 @@ export default function DetailPost({
                                         alt="Profile"
                                         className="w-11 h-11 border border-white/10 rounded-full object-cover"
                                     />
-                                    <input
-                                        type="text"
+                                    <Textarea
                                         placeholder="Bagikan komentar Anda..."
-                                        className="main-input flex flex-1 bg-transparent border-b border-white/30 w-full outline-0 text-white focus:border-[#99ff33] transition-all duration-200"
+                                        className="
+                                            flex flex-1
+                                            bg-transparent! rounded-none
+                                            border-0 border-b border-b-white/10 outline-0
+                                            text-white text-sm md:text-base
+                                            focus-visible:ring-0
+                                            focus-visible:border-b
+                                            focus-visible:border-b-[#99FF33]/50
+                                            transition-colors duration-200
+                                        "
                                         value={commentText}
-                                        onChange={(e) => setCommentText(e.target.value)}/>
+                                        onChange={(e) => setCommentText(e.target.value)}
+                                        maxLength={500}
+                                        autoFocus
+                                    />
+                                </div>
+                                <div className="flex justify-end mb-8">
+                                    <span
+                                        className={`
+                                            text-xs
+                                            ${commentText.length >= 500
+                                                ? "text-red-400"
+                                                : "text-white/40"}
+                                        `}
+                                    >
+                                        {commentText.length}/500
+                                    </span>
                                 </div>
                                 <div
                                     className={`
-                                        post-bottom flex relative items-center justify-end gap-3 duration-200 transition-all
-                                        ${commentText !== '' ?
-                                            'opacity-100 translate-y-0'
-                                        : 'opacity-0 -translate-y-3'}
+                                        flex relative items-center justify-end
+                                        gap-3 duration-200 transition-all
+                                        ${commentText !== ''
+                                            ? 'opacity-100 translate-y-0'
+                                            : 'opacity-0 -translate-y-3'
+                                        }
                                     `}
                                 >
                                     <button
@@ -337,7 +470,11 @@ export default function DetailPost({
                                                 />
                                             </div>
                                             <div className="post-user flex flex-col">
-                                                <h6 className="text-white font-medium text-lg">{comment.user.name || "Anggota Khaslana"}</h6>
+                                                <h6 className="text-white font-medium text-lg">
+                                                    {comment.user.name} {isMyComment(comment.user.id) && (
+                                                        <span className='text-xs text-muted-foreground'>(Anda)</span>
+                                                    )}
+                                                </h6>
                                                 <p className="text-[#888] text-sm">
                                                     {comment.created_at ? new Date(comment.created_at).toLocaleDateString('id-ID', {
                                                         year: 'numeric', month: 'long', day: 'numeric'
@@ -348,7 +485,7 @@ export default function DetailPost({
                                         {isMyComment(comment.user.id) && (
                                             <button
                                                 onClick={() =>
-                                                    handleDeleteComment(comment.id, post.id)
+                                                    openCommentDialog(comment.id)
                                                 }
                                                 className='
                                                     flex items-center justify-center
@@ -363,13 +500,47 @@ export default function DetailPost({
                                             </button>
                                         )}
                                     </div>
-                                    <span className='text-sm md:text-base ps-3 text-white'>
-                                        {comment.comment}
-                                    </span>
+                                    <div className='ps-3'>
+                                        <div
+                                            ref={(el) => checkClamped(el, comment.id)}
+                                            className={`
+                                                whitespace-pre-wrap
+                                                break-words
+                                                overflow-hidden
+                                                text-white
+                                                ${
+                                                    expandedReviews.has(comment.id)
+                                                        ? ''
+                                                        : 'line-clamp-2'
+                                                }
+                                            `}
+                                        >
+                                            {comment.comment}
+                                        </div>
+
+                                        {(clampedReviews.has(comment.id) ||
+                                            expandedReviews.has(comment.id)) && (
+                                            <button
+                                                onClick={() => toggleReview(comment.id)}
+                                                className="
+                                                    mt-2
+                                                    text-[#99FF33]
+                                                    text-sm
+                                                    font-medium
+                                                    hover:underline
+                                                    cursor-pointer
+                                                "
+                                            >
+                                                {expandedReviews.has(comment.id)
+                                                    ? 'Tampilkan lebih sedikit'
+                                                    : 'Selengkapnya'}
+                                            </button>
+                                        )}
+                                    </div>
                                     <button
                                         type="submit"
                                         onClick={() => 
-                                            handleLikeComment(post.id, comment.id)
+                                            handleLikeComment(post.id, comment.id, comment.is_liked)
                                         }
                                         className={`
                                             group
@@ -418,6 +589,17 @@ export default function DetailPost({
                         setIsDeleteDialogOpen(false);
                     }}
                     onConfirm={handleDeletePost}
+                />
+
+                <DeleteConfirmationDialog
+                    open={isDeleteCommentOpen}
+                    title="Hapus Komentar"
+                    description="Apakah Anda yakin ingin menghapus komentar ini? Tindakan ini tidak dapat dibatalkan."
+                    onCancel={() => {
+                        setIsDeleteCommentOpen(false);
+                        setSelectedCommentId(null);
+                    }}
+                    onConfirm={handleDeleteComment}
                 />
             </div>
         </UnusedNavLayout>

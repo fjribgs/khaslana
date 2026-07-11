@@ -200,6 +200,8 @@ export default function CreateIndex({
         valueIndex: number,
         value: string,
     ) => {
+        if (value.length > 50) return;
+
         setAttributes((prev) =>
             prev.map((attr, i) =>
                 i === valueIndex
@@ -217,6 +219,8 @@ export default function CreateIndex({
         valueIndex: number,
         value: string
     ) => {
+        if (value.length > 50) return;
+
         setAttributes((prev) =>
             prev.map((attr, i) => {
                 if (i !== attributeIndex) return attr;
@@ -323,6 +327,14 @@ export default function CreateIndex({
         field: "price" | "stock",
         value: string
     ) => {
+        if (field === "price" && value.length > 12) {
+            return;
+        }
+
+        if (field === "stock" && value.length > 8) {
+            return;
+        }
+
         setVariantData((prev) => ({
             ...prev,
             [key]: {
@@ -333,34 +345,39 @@ export default function CreateIndex({
     };
 
     const handleImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(
-            e.target.files || []
-        );
+        const files = Array.from(e.target.files || []);
         if (!files.length) return;
+
+        const MAX_IMAGES = 5;
+
+        if (images.length + files.length > MAX_IMAGES) {
+            showErrorToast(
+                'Batas foto terlampaui',
+                `Maksimal foto produk yang diperbolehkan hanya ${MAX_IMAGES} foto.`
+            );
+            return;
+        }
 
         const oversizedFiles = files.filter(
             (file) => file.size > 1 * 1024 * 1024
         );
 
         if (oversizedFiles.length > 0) {
-            showErrorToast(`${oversizedFiles[0].name} melebihi batas 1 MB`);
+            showErrorToast(
+                'Ukuran file terlalu besar!',
+                `${oversizedFiles[0].name} melebihi batas 1 MB`
+            );
+            return;
         }
 
-        const validFiles = files.filter(
-            (file) => file.size <= 1 * 1024 * 1024
-        );
-        if (!validFiles.length) return;
-        setImages((prev) => [
-            ...prev,
-            ...validFiles,
-        ]);
-        form.setData(
-            "images",
-            [
-                ...form.data.images,
-                ...validFiles,
-            ]
-        );
+        const updatedImages = [...images, ...files];
+        setImages(updatedImages);
+
+        const newFilesOnly = updatedImages.filter(
+            (file) => file instanceof File
+        ) as File[];
+
+        form.setData("images", newFilesOnly);
     };
 
     const removeImage = (index: number) => {
@@ -399,6 +416,48 @@ export default function CreateIndex({
             showErrorToast(
                 'Nama atribut duplikat',
                 'Nama atribut harus berbeda satu sama lain'
+            );
+            return;
+        }
+
+        if (images.length === 0) {
+            showErrorToast(
+                'Gambar diperlukan',
+                'Anda harus memasukkan minimal 1 foto produk.'
+            );
+            return;
+        }
+
+        let hasEmptyFields = false;
+        
+        for (const variant of generatedVariants) {
+            const price = variantData[variant.key]?.price;
+            const stock = variantData[variant.key]?.stock;
+
+            if (price === undefined || price === "" || stock === undefined || stock === "") {
+                hasEmptyFields = true;
+                break;
+            }
+        }
+
+        if (hasEmptyFields) {
+            showErrorToast(
+                'Data belum lengkap',
+                'Harga dan Stok untuk semua varian wajib diisi!'
+            );
+            return;
+        }
+
+        const MAX_PRICE = 999999999999;
+        const hasInvalidPrice = generatedVariants.some(variant => {
+            const priceNum = Number(variantData[variant.key]?.price || 0);
+            return priceNum > MAX_PRICE;
+        });
+
+        if (hasInvalidPrice) {
+            showErrorToast(
+                'Harga terlalu besar',
+                'Maksimal harga produk yang diizinkan hanya sampai ratusan miliar.'
             );
             return;
         }
@@ -469,6 +528,7 @@ export default function CreateIndex({
                         </Label>
                         <Input
                             value={form.data.name}
+                            maxLength={50}
                             onChange={(e) =>
                                 form.setData('name', e.target.value)
                             }
@@ -494,6 +554,7 @@ export default function CreateIndex({
                         </Label>
                         <Textarea
                             value={form.data.description}
+                            maxLength={1000}
                             onChange={(e) =>
                                 form.setData('description', e.target.value)
                             }
@@ -653,7 +714,7 @@ export default function CreateIndex({
                                         Klik untuk upload foto
                                     </p>
                                     <p className="text-sm text-muted-foreground">
-                                        PNG, JPG, JPEG • Maks 1MB per foto
+                                        PNG, JPG, JPEG, WEBP • Maks 1MB per foto
                                     </p>
                                 </div>
                             </div>
@@ -754,13 +815,14 @@ export default function CreateIndex({
                                 >
                                     <div>
                                         <Label>
-                                            Nama Atribut
+                                            Nama Atribut {` `}
                                             <span className="text-red-400">
                                                 *
                                             </span>
                                         </Label>
                                         <Input
                                             value={attribute.name}
+                                            maxLength={50}
                                             onChange={(e) =>
                                                 updateAttributeName(
                                                     attributeIndex,
@@ -792,7 +854,7 @@ export default function CreateIndex({
                                     </div>
                                     <div className="space-y-2">
                                         <Label>
-                                            Isi Atribut
+                                            Isi Atribut {` `}
                                             <span className="text-red-400">
                                                 *
                                             </span>
@@ -803,12 +865,11 @@ export default function CreateIndex({
                                                 <div key={valueIndex} className="flex flex-col gap-1">
                                                     <Input
                                                         value={value}
+                                                        maxLength={50}
                                                         onChange={(e) =>
                                                             updateAttributeValue(attributeIndex, valueIndex, e.target.value)
                                                         }
-                                                        placeholder={`Contoh: Merah ${valueIndex +
-                                                            1
-                                                            }`}
+                                                        placeholder={`Contoh: Merah ${valueIndex + 1}`}
                                                         className="
                                                             border-gray-500/30
                                                             focus-visible:border-[#99FF33]
@@ -816,9 +877,7 @@ export default function CreateIndex({
                                                         "
                                                         required={
                                                             valueIndex !==
-                                                            attribute.values
-                                                                .length -
-                                                            1
+                                                            attribute.values.length - 1
                                                         }
                                                     />
                                                     {duplicateAttributeValues[
@@ -833,14 +892,12 @@ export default function CreateIndex({
                                                     {form.errors[
                                                         `attributes.${attributeIndex}.values.${valueIndex}`
                                                     ] && (
-                                                            <p className="text-xs text-red-500">
-                                                                {
-                                                                    form.errors[
-                                                                    `attributes.${attributeIndex}.values.${valueIndex}`
-                                                                    ]
-                                                                }
-                                                            </p>
-                                                        )}
+                                                        <p className="text-xs text-red-500">
+                                                            {form.errors[
+                                                                `attributes.${attributeIndex}.values.${valueIndex}`
+                                                            ]}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             )
                                         )}
@@ -851,9 +908,7 @@ export default function CreateIndex({
                                             <Button
                                                 type="button"
                                                 variant="destructive"
-                                                onClick={() =>
-                                                    removeAttribute(attributeIndex)
-                                                }
+                                                onClick={() => removeAttribute(attributeIndex)}
                                             >
                                                 Hapus Atribut
                                             </Button>
@@ -879,9 +934,8 @@ export default function CreateIndex({
                                     className="border border-[#99FF33]/20 rounded-xl p-4 space-y-4"
                                 >
                                     <div
-                                        className="text-sm font-medium text-[#99FF33]">
-                                        {form.data.name ||
-                                            "Produk"}{" "}
+                                        className="text-sm font-medium text-[#99FF33] break-words whitespace-normal leading-relaxed">
+                                        {form.data.name || "Produk"}{" "}
                                         •{" "}
                                         {variant.attributes
                                             .map((item) => `${item.attribute}: ${item.value}`)
@@ -890,12 +944,13 @@ export default function CreateIndex({
                                     <div className="grid md:grid-cols-2 gap-4">
                                         <div>
                                             <Label>
-                                                Harga
+                                                Harga <span className="text-red-400"> *</span>
                                             </Label>
                                             <Input
                                                 type="text"
                                                 inputMode="numeric"
                                                 pattern="[0-9]*"
+                                                maxLength={16}
                                                 value={formatRupiah(variantData[variant.key]?.price || "")}
                                                 onChange={(e) =>
                                                     updateVariantData(
@@ -923,10 +978,11 @@ export default function CreateIndex({
                                         </div>
                                         <div>
                                             <Label>
-                                                Stok
+                                                Stok <span className="text-red-400"> *</span>
                                             </Label>
                                             <Input
                                                 type="number"
+                                                maxLength={11}
                                                 value={variantData[variant.key]?.stock || ""}
                                                 onChange={(e) =>
                                                     updateVariantData(

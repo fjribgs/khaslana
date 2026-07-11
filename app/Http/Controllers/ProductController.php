@@ -171,8 +171,6 @@ class ProductController extends Controller
             return redirect()->route('product')->with('success', 'Produk berhasil ditambahkan.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error($th);
-            throw $th;
 
             foreach ($imagePaths as $path) {
                 if (
@@ -237,12 +235,14 @@ class ProductController extends Controller
             'variants.*.stock' => ['required', 'integer'],
             'variants.*.attributes' => ['required', 'array'],
         ]);
+
         DB::beginTransaction();
         $newImagePaths = [];
 
         try {
             $umkm = Auth::user()->umkm;
             $promoId = ($validated['promo_id'] === 'none' || empty($validated['promo_id'])) ? null : $validated['promo_id'];
+
             $product->update([
                 'category_id' => $validated['category_id'],
                 'promo_id' => $promoId,
@@ -262,100 +262,103 @@ class ProductController extends Controller
                 $image->delete();
             }
 
-            $variantIds = ProductVariant::where('product_id', $product->id)->pluck('id');
-
-            $attributeValueIds = VariantAttribute::whereIn('variant_id', $variantIds)->pluck('attribute_value_id');
-
-            $attributeIds = AttributeValue::whereIn('id', $attributeValueIds)->pluck('attribute_id');
-
-            VariantAttribute::whereIn('variant_id', $variantIds)->delete();
-            ProductVariant::where('product_id', $product->id)->delete();
-
-            AttributeValue::whereIn('attribute_id', $attributeIds)->delete();
-            Attribute::whereIn('id', $attributeIds)->delete();
-
             if ($request->hasFile('images')) {
-                foreach (
-                    $request->file('images')
-                    as $image
-                ) {
+                foreach ($request->file('images') as $image) {
                     $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                     $extension = $image->getClientOriginalExtension();
 
-                    $fileName =
-                        substr(Str::slug($originalName),0, 70)
-                        . '-'
-                        . time()
-                        . '-'
-                        . uniqid()
-                        . '.'
-                        . $extension;
+                    $fileName = substr(Str::slug($originalName), 0, 70)
+                        . '-' . time()
+                        . '-' . uniqid()
+                        . '.' . $extension;
 
                     $path = $image->storeAs("products/{$umkm->id}", $fileName, 'public');
-
                     $newImagePaths[] = $path;
+
                     ProductImage::create([
                         'product_id' => $product->id,
                         'image' => $path,
                     ]);
                 }
             }
+
+            $currentAttributeIds = [];
+            $currentValueIds = [];
             $attributeMap = [];
 
-            foreach (
-                $validated['attributes']
-                as $attributeData
-            ) {
-                $attribute = Attribute::create([
+            foreach ($validated['attributes'] as $attributeData) {
+                $attribute = Attribute::firstOrCreate([
                     'name' => trim($attributeData['name']),
                 ]);
+                $currentAttributeIds[] = $attribute->id;
 
-                foreach (
-                    $attributeData['values']
-                    as $value
-                ) {
-                    $attributeValue =
-                        AttributeValue::create([
-                            'attribute_id' => $attribute->id,
-                            'value' => trim($value),
-                        ]);
-
-                    $attributeMap[
-                        trim($attribute->name)
-                    ][trim($value)] = $attributeValue->id;
+                foreach ($attributeData['values'] as $value) {
+                    $attributeValue = AttributeValue::firstOrCreate([
+                        'attribute_id' => $attribute->id,
+                        'value' => trim($value),
+                    ]);
+                    $currentValueIds[] = $attributeValue->id;
+                    $attributeMap[trim($attribute->name)][trim($value)] = $attributeValue->id;
                 }
             }
 
-            foreach (
-                $validated['variants']
-                as $variantData
-            ) {
-                $variant =
-                    ProductVariant::create([
+            $activeVariantIds = [];
+
+            foreach ($validated['variants'] as $variantData) {
+                $targetValueIds = [];
+                foreach ($variantData['attributes'] as $attr) {
+                    $targetValueIds[] = $attributeMap[trim($attr['attribute'])][trim($attr['value'])];
+                }
+                sort($targetValueIds);
+
+                $existingVariant = ProductVariant::where('product_id', $product->id)
+                    ->whereHas('variantAttributes', function($query) use ($targetValueIds) {
+                        $query->whereIn('attribute_value_id', $targetValueIds);
+                    }, '=', count($targetValueIds))
+                    ->first();
+
+                if ($existingVariant) {
+                    $existingVariant->update([
+                        'price' => $variantData['price'],
+                        'stock' => $variantData['stock'],
+                    ]);
+                    $activeVariantIds[] = $existingVariant->id;
+                } else {
+                    $newVariant = ProductVariant::create([
                         'product_id' => $product->id,
                         'price' => $variantData['price'],
                         'stock' => $variantData['stock'],
                     ]);
+                    $activeVariantIds[] = $newVariant->id;
 
-                foreach (
-                    $variantData['attributes']
-                    as $attribute
-                ) {
-                    VariantAttribute::create([
-                        'variant_id' => $variant->id,
-                        'attribute_value_id' =>
-                            $attributeMap[
-                                trim($attribute['attribute'])
-                            ][trim($attribute['value'])],
-                    ]);
+                    foreach ($targetValueIds as $valueId) {
+                        VariantAttribute::create([
+                            'variant_id' => $newVariant->id,
+                            'attribute_value_id' => $valueId,
+                        ]);
+                    }
                 }
             }
+
+            $oldVariantsToDelete = ProductVariant::where('product_id', $product->id)
+                ->whereNotIn('id', $activeVariantIds)
+                ->get();
+
+            foreach ($oldVariantsToDelete as $oldVariant) {
+                $hasBeenOrdered = DB::table('order_items')->where('variant_id', $oldVariant->id)->exists();
+
+                if (!$hasBeenOrdered) {
+                    VariantAttribute::where('variant_id', $oldVariant->id)->delete();
+                    $oldVariant->delete();
+                }
+            }
+            
             DB::commit();
             return redirect()->route('product')->with('success', 'Produk berhasil diperbarui.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            // Log::error($th);
-            // throw $th;
+            Log::error($th);
+            throw $th;
 
             foreach (
                 $newImagePaths as $path

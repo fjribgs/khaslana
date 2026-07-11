@@ -39,6 +39,8 @@ export default function MyPosts({
     const { user } = useAuth();
     const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [expandedReviews, setExpandedReviews] = useState<Set<number>>(new Set());
+    const [clampedReviews, setClampedReviews] = useState<Set<number>>(new Set());
 
     const handleDeletePost = () => {
         if (!selectedPostId) return;
@@ -74,7 +76,47 @@ export default function MyPosts({
                 showErrorToast("Gagal menyukai postingan");
             }
         })
-    }
+    };
+
+    const toggleReview = (reviewId: number) => {
+        setExpandedReviews((prev) => {
+            const next = new Set(prev);
+
+            if (next.has(reviewId)) {
+                next.delete(reviewId);
+            } else {
+                next.add(reviewId);
+            }
+
+            return next;
+        });
+    };
+
+    const checkClamped = (
+        el: HTMLDivElement | null,
+        reviewId: number
+    ) => {
+        if (!el) return;
+
+        const isClamped = el.scrollHeight > el.clientHeight;
+
+        setClampedReviews((prev) => {
+            const alreadyClamped = prev.has(reviewId);
+
+            if (alreadyClamped === isClamped) {
+                return prev;
+            }
+
+            const next = new Set(prev);
+
+            if (isClamped) {
+                next.add(reviewId);
+            } else {
+                next.delete(reviewId);
+            }
+            return next;
+        });
+    };
 
     return (
         <UnusedNavLayout backHref={community().url} breadcrumbs={breadcrumbs}>
@@ -113,7 +155,7 @@ export default function MyPosts({
                         <Link
                             href={show(post.id)}
                             key={post.id}
-                            className="w-full flex flex-col gap-4 bg-[#222] p-6 rounded-[15px]"
+                            className="w-full flex flex-col gap-4 bg-[#222] p-6 mb-12 rounded-[15px]"
                         >
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-start justify-between gap-4">
@@ -157,7 +199,47 @@ export default function MyPosts({
                                 </div>
 
                                 <div className="post-content flex flex-col ps-3 gap-5 text-[#adaaaa] font-normal">
-                                    <p className="text-md whitespace-pre-line">{post.content}</p>
+                                    <div>
+                                        <div
+                                            ref={(el) => checkClamped(el, post.id)}
+                                            className={`
+                                                whitespace-pre-wrap
+                                                break-words
+                                                overflow-hidden
+                                                text-white
+                                                ${
+                                                    expandedReviews.has(post.id)
+                                                        ? ''
+                                                        : 'line-clamp-2'
+                                                }
+                                            `}
+                                        >
+                                            {post.content}
+                                        </div>
+
+                                        {(clampedReviews.has(post.id) ||
+                                            expandedReviews.has(post.id)) && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    e.stopPropagation()
+                                                    toggleReview(post.id)
+                                                }}
+                                                className="
+                                                    mt-2
+                                                    text-[#99FF33]
+                                                    text-sm
+                                                    font-medium
+                                                    hover:underline
+                                                    cursor-pointer
+                                                "
+                                            >
+                                                {expandedReviews.has(post.id)
+                                                    ? 'Tampilkan lebih sedikit'
+                                                    : 'Selengkapnya'}
+                                            </button>
+                                        )}
+                                    </div>
                                     
                                     {post.post_images && post.post_images.map((imgData) => (
                                         <img 

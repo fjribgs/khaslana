@@ -45,10 +45,7 @@ export default function ProductShow({
                             <span className='text-base text-[#99FF33] group-hover:text-white transition-colors duration-200'>Kembali</span>
                         </Link>
                         <h1 className="text-3xl font-bold">
-                            {product
-                                ? "Edit Produk"
-                                : "Tambah Produk"
-                            }
+                            Detail Produk
                         </h1>
                     </div>
         

@@ -35,7 +35,6 @@ class UmkmController extends Controller
             'city',
             'district',
             'village',
-            'user',
             'user.profile',
             'umkmData',
             'umkmImages',
@@ -43,6 +42,7 @@ class UmkmController extends Controller
             'promos',
         )->firstOrFail();
         $reviews = Review::where('umkm_id', $umkm_id)->with(
+            'user.profile',
             'reviewLikes',
         )->get();
         $products = Product::where('umkm_id', $umkm_id)
@@ -52,7 +52,11 @@ class UmkmController extends Controller
                 'productVariants.attributeValues.attribute',
                 'promo',
                 'category',
-            )->take(4)
+                'reviews.reviewLikes',
+            )
+            ->withAvg('reviews as product_rating', 'rating')
+            ->orderByDesc('product_rating')
+            ->take(4)
             ->get();
 
         $latestLocation = $umkm->umkmLocations->sortByDesc('id')->first();
@@ -117,9 +121,6 @@ class UmkmController extends Controller
         ]);
     }
 
-    /**
-     * Live Tracking untuk UMKM KELILING
-     */
     /**
      * Live Tracking untuk UMKM KELILING
      */

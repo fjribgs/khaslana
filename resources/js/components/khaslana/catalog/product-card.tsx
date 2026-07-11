@@ -60,15 +60,12 @@ export function ProductCard({
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 mt-4">
 
                     {products.map((product) => {
-                        // promo count logic
                         const originalPrice = Number(product.product_variants?.[0]?.price ?? 0);
                         let finalPrice = originalPrice;
 
-                        // cek status promo
                         const isPromoActive = product.promo && product.promo.status === 'BERLANGSUNG';
 
                         if (isPromoActive && product.promo?.type === 'DISKON' && product.promo?.discount_percent) {
-                            // potng harga berdasarkan persen
                             finalPrice = originalPrice - (originalPrice * (Number(product.promo.discount_percent) / 100));
                         }
 
@@ -101,7 +98,6 @@ export function ProductCard({
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
-                                    {/* BADGE PROMO */}
                                     {isPromoActive && product.promo?.discount_percent && (
                                         <div className="absolute top-4 left-4">
                                             <span className="
@@ -140,20 +136,18 @@ export function ProductCard({
                                 </div>
 
                                 <div className="flex flex-col flex-1 p-5">
-                                    <h4 className="text-white text-lg font-bold line-clamp-1 mb-2">
+                                    <h4 className="text-white text-lg font-bold break-words line-clamp-1 mb-2">
                                         {product.name}
                                     </h4>
 
                                     {/* harga n rating */}
                                     <div className="flex items-center justify-between mt-1">
                                         <div className="flex flex-col">
-                                            {/* menampilkan harga asli dicoret jika ada promo */}
                                             {isPromoActive && originalPrice > finalPrice && (
                                                 <span className="text-xs text-red-400 line-through decoration-red-400 font-medium">
                                                     Rp {originalPrice.toLocaleString('id-ID')}
                                                 </span>
                                             )}
-                                            {/* menampilkan harga final */}
                                             <span className="text-[#99FF33] font-bold">
                                                 Rp {finalPrice.toLocaleString('id-ID')}
                                             </span>
@@ -161,7 +155,7 @@ export function ProductCard({
 
                                         <div className="flex items-center gap-1 text-white text-sm">
                                             <img src={starIcon} className="w-3.5 h-3.5" />
-                                            {product.umkm?.average_rating ?? 0}
+                                            {product.product_rating ?? 0}
                                         </div>
                                     </div>
 
@@ -185,6 +179,7 @@ export function ProductCard({
 
             {selectedProduct && (
                 <VariantDialog
+                    key={`${selectedProduct.id}-add-cart`}
                     product={selectedProduct}
                     open={isDialogOpen}
                     onClose={() => setIsDialogOpen(false)}

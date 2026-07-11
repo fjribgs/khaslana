@@ -28,6 +28,8 @@ export default function CommunityIndex({
     const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [showLoginDialog, setShowLoginDialog] = useState(false);
+    const [expandedReviews, setExpandedReviews] = useState<Set<number>>(new Set());
+    const [clampedReviews, setClampedReviews] = useState<Set<number>>(new Set());
 
     const handleCardClicked = (postId: number) => {
         if(!user) {
@@ -86,7 +88,47 @@ export default function CommunityIndex({
         } else {
             router.visit(create());
         }
-    }
+    };
+
+    const toggleReview = (reviewId: number) => {
+        setExpandedReviews((prev) => {
+            const next = new Set(prev);
+
+            if (next.has(reviewId)) {
+                next.delete(reviewId);
+            } else {
+                next.add(reviewId);
+            }
+
+            return next;
+        });
+    };
+
+    const checkClamped = (
+        el: HTMLDivElement | null,
+        reviewId: number
+    ) => {
+        if (!el) return;
+
+        const isClamped = el.scrollHeight > el.clientHeight;
+
+        setClampedReviews((prev) => {
+            const alreadyClamped = prev.has(reviewId);
+
+            if (alreadyClamped === isClamped) {
+                return prev;
+            }
+
+            const next = new Set(prev);
+
+            if (isClamped) {
+                next.add(reviewId);
+            } else {
+                next.delete(reviewId);
+            }
+            return next;
+        });
+    };
 
     return (
         <div className="relative flex flex-col items-center pt-20 md:pt-28 px-6 md:px-12 lg:px-17.5 w-full min-h-screen">
@@ -178,7 +220,46 @@ export default function CommunityIndex({
                                         </div>
 
                                         <div className="post-content flex flex-col ps-3 gap-5 text-[#adaaaa] font-normal">
-                                            <p className="text-md whitespace-pre-line">{post.content}</p>
+                                            <div>
+                                                <div
+                                                    ref={(el) => checkClamped(el, post.id)}
+                                                    className={`
+                                                        whitespace-pre-wrap
+                                                        break-words
+                                                        overflow-hidden
+                                                        text-white
+                                                        ${
+                                                            expandedReviews.has(post.id)
+                                                                ? ''
+                                                                : 'line-clamp-2'
+                                                        }
+                                                    `}
+                                                >
+                                                    {post.content}
+                                                </div>
+
+                                                {(clampedReviews.has(post.id) ||
+                                                    expandedReviews.has(post.id)) && (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            toggleReview(post.id)
+                                                        }}
+                                                        className="
+                                                            mt-2
+                                                            text-[#99FF33]
+                                                            text-sm
+                                                            font-medium
+                                                            hover:underline
+                                                            cursor-pointer
+                                                        "
+                                                    >
+                                                        {expandedReviews.has(post.id)
+                                                            ? 'Tampilkan lebih sedikit'
+                                                            : 'Selengkapnya'}
+                                                    </button>
+                                                )}
+                                            </div>
                                             
                                             {post.post_images && post.post_images.map((imgData) => (
                                                 <img 

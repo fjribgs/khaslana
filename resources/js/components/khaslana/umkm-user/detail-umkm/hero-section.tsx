@@ -71,7 +71,7 @@ export default function HeroSection({
                 </div>
                 <div className="mt-3">
                     <span className="text-sm md:text-base text-[#cdcccc]">
-                        {umkmData.open_days === 'Setiap Hari'
+                        {umkmData.open_days === 'SETIAP HARI'
                             ? `Buka ${umkmData.open_days}`
                             : `Buka Hari ${umkmData.open_days}`
                         }
@@ -119,10 +119,14 @@ export default function HeroSection({
                         "
                     >
                         <span
-                            className={`text-[10px] lg:text-[10.5px] font-bold uppercase tracking-wider ${status
+                            className={`
+                                text-[10px] lg:text-[10.5px]
+                                font-bold uppercase tracking-wider
+                                ${status
                                     ? 'text-[#99FF33]'
                                     : 'text-gray-400'
-                                }`}
+                                }
+                            `}
                         >
                             {status
                                 ? 'Sedang Buka'

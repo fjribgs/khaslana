@@ -45,7 +45,8 @@ export default function VariantDialog({
     }, [product]);
     const hasVariants = Object.keys(groupedAttributes).length > 0;
 
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState("1");
+    const quantityNumber = Number(quantity) || 1;
     const [selectedAttributes, setSelectedAttributes] =
         useState<Record<string, string>>(() => {
             const initial: Record<string, string> = {};
@@ -91,7 +92,6 @@ export default function VariantDialog({
         selectedAttributes,
     ]);
 
-    // --- LOGIKA PERHITUNGAN HARGA PROMO ---
     const originalPrice = selectedVariant?.price ?? 0;
     const stock = selectedVariant?.stock ?? 0;
     const isPurchasable = selectedVariant !== undefined && stock > 0;
@@ -102,7 +102,6 @@ export default function VariantDialog({
     if (isPromoActive && product.promo?.type === 'DISKON' && product.promo?.discount_percent) {
         finalPrice = originalPrice - (originalPrice * (Number(product.promo.discount_percent) / 100));
     }
-    // --------------------------------------
 
     const formatPrice = (value: number) => new Intl.NumberFormat("id-ID").format(value);
     const image = product.product_images?.[0]?.image;
@@ -131,27 +130,54 @@ export default function VariantDialog({
 
         const nextStock = nextVariant?.stock ?? 0;
 
-        setQuantity((prev) => Math.min(Math.max(prev, 1), Math.max(nextStock, 1)));
+        // setQuantity((prev) => Math.min(Math.max(prev, 1), Math.max(nextStock, 1)));
+        setQuantity((prev) =>
+            String(
+                Math.min(
+                    Math.max(Number(prev) || 1, 1),
+                    Math.max(nextStock, 1)
+                )
+            )
+        );
     };
+
+    // const handleQuantityChange = (
+    //     e: React.ChangeEvent<HTMLInputElement>
+    // ) => {
+    //     let value = e.target.value;
+
+    //     value = value.replace(/\D/g, "");
+    //     value = value.replace(/^0+/, "");
+
+    //     if (value === "") {
+    //         setQuantity(1);
+    //         return;
+    //     }
+    //     let qty = Number(value);
+
+    //     if (qty < 1) qty = 1;
+    //     if (qty > stock) qty = stock;
+
+    //     setQuantity(qty);
+    // };
 
     const handleQuantityChange = (
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
-        let value = e.target.value;
-
-        value = value.replace(/\D/g, "");
-        value = value.replace(/^0+/, "");
+        let value = e.target.value.replace(/\D/g, "");
 
         if (value === "") {
-            setQuantity(1);
+            setQuantity("");
             return;
         }
-        let qty = Number(value);
 
-        if (qty < 1) qty = 1;
-        if (qty > stock) qty = stock;
+        const qty = Number(value);
 
-        setQuantity(qty);
+        if (qty > stock) {
+            value = String(stock);
+        }
+
+        setQuantity(value);
     };
 
     const handleSubmit = () => {
@@ -163,9 +189,6 @@ export default function VariantDialog({
         if (!selectedVariant) {
             return;
         }
-
-        console.log(selectedVariant);
-        console.log(selectedAttributes);
 
         console.log({
             actionType,
@@ -180,7 +203,7 @@ export default function VariantDialog({
                 "/cart/add",
                 {
                     product_variant_id: selectedVariant.id,
-                    quantity,
+                    quantity: quantityNumber,
                 },
                 {
                     preserveScroll: true,
@@ -206,7 +229,7 @@ export default function VariantDialog({
             router.post(dialogStore(product.id).url,
                 {
                     variant_id: selectedVariant.id,
-                    quantity,
+                    quantity: quantityNumber,
                 },
                 {
                     preserveScroll: true,
@@ -226,7 +249,7 @@ export default function VariantDialog({
     return (
         <div
             className="
-                fixed inset-0 z-50
+                fixed inset-0 z-999
                 bg-black/70 backdrop-blur-sm
                 flex items-center justify-center
                 p-4
@@ -237,15 +260,18 @@ export default function VariantDialog({
                 onClick={(e) => e.stopPropagation()}
                 className="
                     w-full max-w-3xl
+                    max-h-[90vh]
                     bg-[#1E1B26]
                     border border-[#2E2A39]
                     rounded-3xl
                     overflow-hidden
+                    flex flex-col
                 "
             >
                 {/* header section */}
                 <div
                     className="
+                        sticky top-0 z-10
                         flex items-center justify-between
                         px-6 py-5
                         border-b border-[#2E2A39]
@@ -257,19 +283,21 @@ export default function VariantDialog({
                     <button
                         onClick={onClose}
                         className="
+                            group
                             h-10 w-10
                             rounded-full
                             flex items-center justify-center
-                            hover:bg-white/10
-                            transition
+                            hover:bg-red-400/10
+                            transition-all duration-200
                             cursor-pointer
                         "
                     >
-                        <X size={20} className="text-white" />
+                        <X size={20} className="text-white group-hover:text-red-500 transition-all duration-200" />
                     </button>
                 </div>
 
-                <div className="p-6">
+                {/* dialog body */}
+                <div className="flex-1 overflow-y-auto p-6">
                     <div className="flex items-center gap-5">
                         <div
                             className="
@@ -291,7 +319,6 @@ export default function VariantDialog({
                             />
                         </div>
                         <div className="flex flex-col justify-center">
-                            {/* --- UPDATE TAMPILAN HARGA PROMO --- */}
                             <div className="flex items-end gap-3">
                                 <h3
                                     className="
@@ -308,7 +335,6 @@ export default function VariantDialog({
                                     </span>
                                 )}
                             </div>
-                            {/* ----------------------------------- */}
                             <p className="text-white text-xl mt-2 font-medium">
                                 {product.name}
                             </p>
@@ -412,7 +438,11 @@ export default function VariantDialog({
                             </div>
                         </div>
                     )}
-                    <div className="mt-8 flex items-center justify-between">
+                </div>
+
+                {/* footer section */}
+                <div className="mt-8 p-6 shrink-0 border-t border-[#2E2A39]">
+                    <div className="flex items-center justify-between">
                         <span className="text-white font-medium">
                             Jumlah
                         </span>
@@ -426,7 +456,7 @@ export default function VariantDialog({
                         >
                             <button
                                 onClick={() =>
-                                    setQuantity((prev) => Math.max(1, prev - 1))
+                                    setQuantity(String(Math.max(1, quantityNumber - 1)))
                                 }
                                 disabled={stock <= 1}
                                 className={`
@@ -436,7 +466,7 @@ export default function VariantDialog({
                                     cursor-pointer
                                     disabled:cursor-not-allowed
                                     disabled:text-white/50
-                                    ${quantity <= 1 && 'text-white/50 hover:cursor-not-allowed'}
+                                    ${quantityNumber <= 1 && 'text-white/50 hover:cursor-not-allowed'}
                                 `}
                             >
                                 <Minus size={18} />
@@ -446,6 +476,7 @@ export default function VariantDialog({
                                 inputMode="numeric"
                                 disabled={!isPurchasable}
                                 value={quantity}
+                                onFocus={(e) => e.target.select()}
                                 onChange={handleQuantityChange}
                                 onKeyDown={(e) => {
                                     if (["e", "E", "+", "-", "."].includes(e.key)) {
@@ -462,8 +493,10 @@ export default function VariantDialog({
                                 "
                             />
                             <button
-                                onClick={() => setQuantity((prev) => Math.min(stock, prev + 1))}
-                                disabled={stock <= 0 || quantity >= stock}
+                                onClick={() =>
+                                    setQuantity(String(Math.min(stock, quantityNumber + 1)))
+                                }
+                                disabled={stock <= 0 || quantityNumber >= stock}
                                 className="
                                     w-12 h-12
                                     flex items-center justify-center

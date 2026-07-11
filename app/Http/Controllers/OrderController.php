@@ -99,7 +99,7 @@ class OrderController extends Controller
             $invoiceNumber = 'INV-' . now()->format('YmdHis') . '-' . Str::upper(Str::random(5));
 
             $finalItemPrice = $variant->price;
-            $productPromo = $product->promo; // Ambil promo dari $product yang sudah di-load
+            $productPromo = $product->promo;
 
             if ($productPromo && $productPromo->status === 'BERLANGSUNG') {
                 if ($productPromo->type === 'DISKON' && $productPromo->discount_percent) {
@@ -108,7 +108,7 @@ class OrderController extends Controller
                 $finalItemPrice = max(0, $finalItemPrice);
             }
                 
-            $subtotal = $finalItemPrice * $request->quantity; // Perbaikan typo $item menjadi $request
+            $subtotal = $finalItemPrice * $request->quantity;
             
             $variantDetail = $variant->attributeValues
                 ->map(function ($attributeValue) {
@@ -139,7 +139,7 @@ class OrderController extends Controller
 
                 'product_name' => $product->name,
                 'variant_detail' => $variantDetail,
-                'price' => $finalItemPrice, // Perbaikan typo $finalPrice menjadi $finalItemPrice
+                'price' => $finalItemPrice,
                 'quantity' => $request->quantity,
                 'subtotal' => $subtotal,
             ]);

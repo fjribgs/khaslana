@@ -19,8 +19,8 @@ class CartController extends Controller
         $userId = Auth::id();
 
         $cart = Cart::with([
-            // 🔥 FIX: relation name
             'cartItems.variant.product.umkm',
+            'cartItems.variant.product.promo',
             'cartItems.variant.product.productImages',
             'cartItems.variant.attributeValues.attribute'
         ])->where('user_id', $userId)->first();
@@ -40,14 +40,6 @@ class CartController extends Controller
         $variant = ProductVariant::with('product.umkm')->findOrFail($request->product_variant_id);
         $userId = Auth::id();
 
-        // if ($variant->product->umkm->status === 'TUTUP') {
-        //     return redirect()->back()->withErrors([
-        //         'message' => 'Maaf, toko sedang tutup. Anda tidak dapat menambahkan produk ke keranjang.'
-        //     ]);
-        // }
-
-        $userId = Auth::id();
-
         if ($variant->product->umkm->user_id === $userId) {
             return redirect()->back()->withErrors([
                 'message' => 'Anomali Sistem: Anda tidak dapat menambahkan produk dari UMKM milik Anda sendiri ke keranjang.'
@@ -56,7 +48,6 @@ class CartController extends Controller
 
         $cart = Cart::firstOrCreate(['user_id' => $userId]);
 
-        // 🔥 FIX: variant_id
         $cartItem = CartItem::where('cart_id', $cart->id)
             ->where('variant_id', $request->product_variant_id)
             ->first();
@@ -76,7 +67,7 @@ class CartController extends Controller
 
             CartItem::create([
                 'cart_id' => $cart->id,
-                'variant_id' => $request->product_variant_id, // 🔥 FIX
+                'variant_id' => $request->product_variant_id,
                 'quantity' => $request->quantity,
             ]);
         }
@@ -94,7 +85,6 @@ class CartController extends Controller
             $query->where('user_id', Auth::id());
         })->findOrFail($id);
 
-        // 🔥 FIX
         $variant = ProductVariant::findOrFail($cartItem->variant_id);
 
         if ($variant->stock < $request->quantity) {
@@ -139,7 +129,7 @@ class CartController extends Controller
             ]);
         }
 
-        // 🔒 SINGLE UMKM VALIDATION
+        // SINGLE UMKM VALIDATION
         $umkmIds = $selectedItems->pluck('variant.product.umkm_id')->unique();
         if ($umkmIds->count() > 1) {
             return redirect()->back()->withErrors([
@@ -147,10 +137,11 @@ class CartController extends Controller
             ]);
         }
 
+        // BUG FIX: Jangan ditimpa pakai Object Model
         $targetUmkmId = $umkmIds->first();
 
-        $targetUmkmId = $selectedItems->first()->variant->product->umkm;
-        if ($targetUmkmId->status === 'TUTUP') {
+        $umkm = $selectedItems->first()->variant->product->umkm;
+        if ($umkm->status === 'TUTUP') {
             return redirect()->back()->withErrors([
                 'message' => 'Maaf, toko sedang tutup. Anda tidak dapat melakukan checkout saat ini.'
             ]);
@@ -159,21 +150,28 @@ class CartController extends Controller
         DB::beginTransaction();
 
         try {
-            // 🔥 GENERATE INVOICE (SAMA SEPERTI OrderController)
-            $invoiceNumber =
-                'INV-' .
-                now()->format('YmdHis') .
-                '-' .
-                strtoupper(\Illuminate\Support\Str::random(5));
+            // GENERATE INVOICE 
+            $invoiceNumber = 'INV-' . now()->format('YmdHis') . '-' . strtoupper(\Illuminate\Support\Str::random(5));
 
             $totalPrice = 0;
+
+            // LOOP 1: Hitung Total Price
             foreach ($selectedItems as $item) {
                 $itemPrice = $item->variant->price;
-                $productPromo = $item->variant->product->promo;
+
+                // BUG FIX: Atasi kemungkinan promo berbentuk Collection
+                $promoData = $item->variant->product->promo;
+                $productPromo = $promoData instanceof \Illuminate\Illuminate\Database\Eloquent\Collection ? $promoData->first() : $promoData;
 
                 if ($productPromo && $productPromo->status === 'BERLANGSUNG') {
-                    if ($productPromo->type === 'DISKON' && $productPromo->discount_percent) {
-                        $itemPrice = $itemPrice - ($itemPrice * ($productPromo->discount_percent / 100));
+                    // Penyelarasan kolom diskon yang inkonsisten
+                    $discountPercent = $productPromo->discount_percent ?? $productPromo->value ?? 0;
+                    $nominalValue = $productPromo->value ?? 0;
+
+                    if (in_array($productPromo->type, ['DISKON', 'PERCENTAGE']) && $discountPercent > 0) {
+                        $itemPrice = $itemPrice - ($itemPrice * ($discountPercent / 100));
+                    } elseif ($productPromo->type === 'NOMINAL' && $nominalValue > 0) {
+                        $itemPrice = $itemPrice - $nominalValue;
                     }
                     $itemPrice = max(0, $itemPrice);
                 }
@@ -181,38 +179,42 @@ class CartController extends Controller
                 $totalPrice += $itemPrice * $item->quantity;
             }
 
-            // 🔥 CREATE ORDER (SYNC DENGAN OrderController)
+            // CREATE ORDER 
             $order = Order::create([
                 'user_id' => $userId,
-                'umkm_id' => $targetUmkmId,
-
+                'umkm_id' => $targetUmkmId, // Sekarang aman karena isinya beneran ID
                 'invoice_number' => $invoiceNumber,
                 'type' => 'DIAMBIL',
                 'total_price' => $totalPrice,
                 'status' => 'TERTUNDA',
                 'payment_status' => 'BELUM DIBAYAR',
-
                 'address' => '',
-                'shipping_cost' => $selectedItems->first()->variant->product->umkm->shipping_cost ?? 0,
+                'shipping_cost' => $umkm->shipping_cost ?? 0,
             ]);
 
+            // LOOP 2: Create Order Items
             foreach ($selectedItems as $item) {
                 // Load variant bersama produk dan promonya
                 $variant = ProductVariant::lockForUpdate()->with('product.promo')->findOrFail($item->variant_id);
 
                 if ($variant->stock < $item->quantity) {
-                    throw new \Exception("Stok tidak mencukupi.");
+                    throw new \Exception("Stok tidak mencukupi untuk produk " . $variant->product->name);
                 }
 
                 // HITUNG KEMBALI HARGA DISKON UNTUK MASING-MASING ITEM
                 $finalItemPrice = $variant->price;
-                $productPromo = $variant->product->promo;
 
-                if ($productPromo) {
-                    if ($productPromo->type === 'PERCENTAGE') {
-                        $finalItemPrice = $finalItemPrice - ($finalItemPrice * ($productPromo->value / 100));
-                    } elseif ($productPromo->type === 'NOMINAL') {
-                        $finalItemPrice = $finalItemPrice - $productPromo->value;
+                $promoData = $variant->product->promo;
+                $productPromo = $promoData instanceof \Illuminate\Database\Eloquent\Collection ? $promoData->first() : $promoData;
+
+                if ($productPromo && $productPromo->status === 'BERLANGSUNG') {
+                    $discountPercent = $productPromo->discount_percent ?? $productPromo->value ?? 0;
+                    $nominalValue = $productPromo->value ?? 0;
+
+                    if (in_array($productPromo->type, ['DISKON', 'PERCENTAGE']) && $discountPercent > 0) {
+                        $finalItemPrice = $finalItemPrice - ($finalItemPrice * ($discountPercent / 100));
+                    } elseif ($productPromo->type === 'NOMINAL' && $nominalValue > 0) {
+                        $finalItemPrice = $finalItemPrice - $nominalValue;
                     }
                     $finalItemPrice = max(0, $finalItemPrice);
                 }
@@ -221,16 +223,10 @@ class CartController extends Controller
                     ->map(fn($attr) => $attr->attribute->name . ': ' . $attr->value)
                     ->join(', ');
 
+                // BUG FIX: Jangan ditimpa dengan harga normal!
                 $subtotal = $finalItemPrice * $item->quantity;
 
-                // 🔥 VARIANT DETAIL (SAMA FORMAT DENGAN OrderController)
-                $variantDetail = $variant->attributeValues
-                    ->map(fn($attr) => $attr->attribute->name . ': ' . $attr->value)
-                    ->join(', ');
-
-                $subtotal = $variant->price * $item->quantity;
-
-                // 🔥 SIMPAN HARGA SETELAH DISKON KE ORDER ITEM
+                // SIMPAN HARGA SETELAH DISKON KE ORDER ITEM
                 $order->orderItems()->create([
                     'product_id' => $variant->product->id,
                     'variant_id' => $variant->id,
@@ -240,13 +236,10 @@ class CartController extends Controller
                     'quantity' => $item->quantity,
                     'subtotal' => $subtotal,
                 ]);
-
-                
             }
 
             DB::commit();
 
-            // 🔥 REDIRECT KE HALAMAN YANG BENAR (OrderIndex)
             return redirect()->route('order', $order->id)
                 ->with('success', 'Pesanan berhasil dibuat.');
         } catch (\Exception $e) {

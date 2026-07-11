@@ -44,7 +44,6 @@ export default function OrderIndex({
 
     const service_fee = 2000;
     
-    // Subtotal dihitung dari subtotal items (yang sudah dipotong diskon oleh backend)
     const subtotal = items.reduce(
         (acc, item) => acc + Number(item.subtotal ?? 0),
         0
@@ -156,9 +155,6 @@ export default function OrderIndex({
                         const product = item.product;
                         const variant = item.variant;
                         const quantity = item.quantity;
-                        
-                        // --- LOGIKA CEK HARGA ---
-                        // variant?.price adalah harga asli, item.price adalah harga yang tersimpan saat checkout (bisa jadi sudah didiskon)
                         const originalPrice = Number(variant?.price ?? 0);
                         const purchasedPrice = Number(item.price ?? 0);
                         const isDiscounted = originalPrice > purchasedPrice;
@@ -169,7 +165,6 @@ export default function OrderIndex({
 
                                 <div className="flex gap-5">
                                     <div className="relative">
-                                        {/* Tampilkan Badge Jika Item di Diskon */}
                                         {isDiscounted && (
                                             <div className="absolute top-2 -left-2 bg-[#99ff33] text-black text-[10px] font-bold px-2 py-0.5 rounded-md shadow-md z-10">
                                                 {isDiscount ? (
@@ -205,7 +200,6 @@ export default function OrderIndex({
                                 </div>
 
                                 <div className="flex flex-col items-end justify-center">
-                                    {/* --- TAMPILAN SINKRONISASI HARGA --- */}
                                     <div className="flex flex-col items-end mb-2">
                                         {isDiscounted ? (
                                             <>
@@ -253,7 +247,7 @@ export default function OrderIndex({
                                     value={user.name}
                                     className="mt-2 border-gray-500/30 focus-visible:border-[#99FF33] bg-[#181818] focus-visible:ring-0 transition-all duration-200"
                                     required
-                                    readOnly // Agar nama tidak diubah disini (ambil dr data user)
+                                    readOnly
                                 />
                             </div>
                             <div className='flex flex-col gap-1'>

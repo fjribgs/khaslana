@@ -23,7 +23,7 @@ export default function ShowIndex({
                 )
             case 'MENUNGGU PEMBAYARAN':
                 return (
-                    <div className="px-4 py-1.5 border border-yellow-500 text-yellow-400 bg-orange-500/10 rounded-full font-bold text-md max-md:text-xs max-md:mt-2">MENUNGGU PEMBAYARAN</div>
+                    <div className="px-4 py-1.5 border border-yellow-500 text-yellow-400 bg-orange-500/10 rounded-full font-bold text-md max-md:text-xs max-md:mt-2 whitespace-nowrap">MENUNGGU PEMBAYARAN</div>
                 )
             case 'DIBAYAR':
                 return (
@@ -31,11 +31,11 @@ export default function ShowIndex({
                 )
             case 'DALAM PROSES':
                 return (
-                    <div className="px-4 py-1.5 border border-yellow-500 text-yellow-400 bg-orange-500/10 rounded-full font-bold text-md max-md:text-xs max-md:mt-2">DALAM PROSES</div>
+                    <div className="px-4 py-1.5 border border-yellow-500 text-yellow-400 bg-orange-500/10 rounded-full font-bold text-md max-md:text-xs max-md:mt-2 whitespace-nowrap">DALAM PROSES</div>
                 )
             case 'SIAP DIAMBIL':
                 return (
-                    <div className="px-4 py-1.5 border border-yellow-500 text-yellow-400 bg-orange-500/10 rounded-full font-bold text-md max-md:text-xs max-md:mt-2">SIAP DIAMBIL</div>
+                    <div className="px-4 py-1.5 border border-yellow-500 text-yellow-400 bg-orange-500/10 rounded-full font-bold text-md max-md:text-xs max-md:mt-2 whitespace-nowrap">SIAP DIAMBIL</div>
                 )
             case 'DIKIRIM':
                 return (
@@ -56,7 +56,7 @@ export default function ShowIndex({
         switch (status) {
             case 'BELUM DIBAYAR':
                 return (
-                    <div className="px-4 py-1.5 border border-yellow-500 text-yellow-400 bg-orange-500/10 rounded-full font-bold text-sm max-md:text-xs max-md:mt-2">BELUM DIBAYAR</div>
+                    <div className="px-4 py-1.5 border border-yellow-500 text-yellow-400 bg-orange-500/10 rounded-full font-bold text-sm max-md:text-xs max-md:mt-2 whitespace-nowrap">BELUM DIBAYAR</div>
                 )
             case 'DIBAYAR':
                 return (

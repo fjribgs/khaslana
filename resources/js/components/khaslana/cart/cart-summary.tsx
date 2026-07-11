@@ -20,10 +20,29 @@ export const CartSummary: React.FC<CartSummaryProps> = ({
 
     // Total harga
     const totalPrice = selectedItems.reduce((acc, item) => {
-        const price = item.variant?.price ?? 0;
-        return acc + price * item.quantity;
+        const variant = item.variant;
+        const product = variant?.product;
+    
+        let finalItemPrice = variant?.price ?? 0;
+    
+        const promo = product?.promo;
+    
+        if (
+            promo &&
+            promo.status === 'BERLANGSUNG' &&
+            promo.type === 'DISKON' &&
+            promo.discount_percent
+        ) {
+            finalItemPrice =
+                finalItemPrice -
+                (finalItemPrice * promo.discount_percent / 100);
+    
+            finalItemPrice = Math.max(0, finalItemPrice);
+        }
+    
+        return acc + (finalItemPrice * item.quantity);
     }, 0);
-
+    
     // Validasi UMKM
     const uniqueUmkmIds = Array.from(
         new Set(selectedItems.map((item) => item.variant?.product?.umkm_id))

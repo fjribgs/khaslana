@@ -2,12 +2,14 @@ import { router } from "@inertiajs/react";
 import { ThumbsUp, Trash, MessageCircleX } from "lucide-react";
 import { useState } from "react";
 
-import ProfileIcon from "@/assets/icons/default-profile.png";
+import DefaultProfile from "@/assets/icons/default-profile.png";
 import { useAuth } from "@/hooks/use-auth";
 import LoginRequiredDialog from '@/components/khaslana/login-required-dialog';
-import ConfirmationDialog from "@/components/khaslana/confirmation-dialog";
+import DeleteConfirmationDialog from "@/components/khaslana/delete-confirmation-dialog";
 import { showSuccessToast, showErrorToast } from "@/lib/toast";
 import type { Product } from "@/types/product";
+import { Textarea } from "@/components/ui/textarea";
+import { deleteReview, likeReview } from "@/routes/catalog";
 
 interface ProductDetailProps {
     product: Product;
@@ -26,10 +28,10 @@ export default function ReviewSection({
         (review) => review.user.id === user.id
     );
     const hasPurchased = !!user &&
-        product.order?.some(
+        product.order_items?.some(
             (item) =>
-                item.user_id === user.id &&
-                item.status === "SELESAI"
+                item.order?.user_id === user.id &&
+                item.order?.status === "SELESAI"
         );
 
     // const [isUploaded, setIsUploaded] = useState(false);
@@ -80,7 +82,7 @@ export default function ReviewSection({
         if (!selectedReviewId) return;
 
         router.delete(
-            `/catalog/${product.id}/review/${selectedReviewId}`,
+            deleteReview(selectedReviewId),
             {
                 preserveScroll: true,
                 onSuccess: () => {
@@ -95,18 +97,23 @@ export default function ReviewSection({
         setSelectedReviewId(null);
     };
 
-    const handleLikeReview = (reviewId: number, productId: number) => {
+    const handleLikeReview = (reviewId: number, is_liked: boolean) => {
         if (!user) {
             setShowLoginDialog(true);
             return;
         } else {
-            router.post(`/catalog/${productId}/review/${reviewId}/like`, {}, {
+            router.post(likeReview(reviewId), {}, {
                 preserveScroll: true,
                 onSuccess: () => {
-                    console.log("Toggle like ulasan sukses!");
+                    if (!is_liked) {
+                        showSuccessToast('Ulasan berhasil disukai!');
+                    } else {
+                        showSuccessToast('Disukai berhasil dibatalkan dari ulasan!');
+                    }
                 },
                 onError: (err) => {
                     console.error("Gagal melakukan like ulasan: ", err);
+                    showErrorToast('Ulasan gagal disukai');
                 }
             })
         }
@@ -160,11 +167,8 @@ export default function ReviewSection({
             </div>
 
             <div>
-                <div className="relative flex flex-col items-center w-full">        
-                    {/* {isUploaded &&  (
-                        <div className="w-full bg-[#99FF33]/20 border border-[#99FF33] text-[#99FF33] p-4 rounded-[15px] text-sm font-medium mb-8">Ulasan berhasil diupload!</div>
-                    )} */}
-        
+                <div className="relative flex flex-col items-center w-full">
+
                     {/* make a review */}
                     {user && hasPurchased && !hasReviewed && (
                         <div className="flex flex-col justify-between w-full p-3 gap-4 rounded-[15px]">
@@ -186,32 +190,34 @@ export default function ReviewSection({
 
                             <div className="flex gap-5 w-full">
                                 <img
-                                    src={ProfileIcon}
+                                    src={user.profile_photo ?? DefaultProfile}
                                     alt="Profile"
-                                    className="w-10 h-10 max-md:w-7 max-md:h-7"
+                                    className="w-11 h-11 border border-white/10 rounded-full object-cover aspect-square"
                                 />
 
-                                <div className="flex-1">
-                                    <textarea
+                                <div className="flex items-center w-full min-w-0">
+                                    <Textarea
                                         placeholder="Bagikan ulasan Anda..."
                                         rows={4}
                                         maxLength={1000}
                                         value={reviewText}
                                         onChange={(e) => setReviewText(e.target.value)}
                                         className="
-                                            w-full resize-none bg-transparent
-                                            border border-white/20 rounded-2xl
-                                            p-4 outline-none text-white
-                                            focus:border-[#99ff33]
-                                            transition-all duration-200
-                                            break-words
+                                            flex flex-1
+                                            bg-transparent! rounded-none
+                                            border-0 border-b border-b-white/10 outline-0
+                                            text-white text-sm md:text-base
+                                            focus-visible:ring-0
+                                            focus-visible:border-b
+                                            focus-visible:border-b-[#99FF33]/50
+                                            transition-colors duration-200
                                         "
                                     />
 
-                                    <div className="mt-2 text-sm text-[#888] text-right">
-                                        {reviewText.length}/1000
-                                    </div>
                                 </div>
+                            </div>
+                            <div className="mt-2 text-sm text-[#888] text-right">
+                                {reviewText.length}/1000
                             </div>
 
                             <div
@@ -279,17 +285,17 @@ export default function ReviewSection({
                         reviews.map((review) => (
                             <div key={review.id} className='flex flex-col gap-5 bg-[#222] p-8 rounded-3xl'>
                                 <div className="flex items-center gap-5 w-full justify-between">
-                                    <div className='flex gap-5 items-center'>
-                                        <div className="post-avatar">
-                                            <img
-                                                src={ProfileIcon}
-                                                alt="Profile"
-                                                className="avatar w-10 h-10 max-md:w-8 max-md:h-8 rounded-full object-cover"
-                                            />
-                                        </div>
+                                    <div className='flex gap-5 items-center ps-2'>
+                                        <img
+                                            src={user.profile_photo ?? DefaultProfile}
+                                            alt="Profile"
+                                            className="avatar w-10 h-10 max-md:w-8 max-md:h-8 rounded-full object-cover"
+                                        />
                                         <div className="post-user flex flex-col">
                                             <h6 className="text-white font-medium text-lg">
-                                                {review.user.name || "Anggota Khaslana"}
+                                                {review.user.name} {isMyReview(review.user.id) && (
+                                                    <span className="text-xs text-muted-foreground">(Anda)</span>
+                                                )}
                                             </h6>
                                             <p className="text-[#888] text-sm">
                                                 {review.created_at ? new Date(review.created_at).toLocaleDateString('id-ID', {
@@ -303,7 +309,7 @@ export default function ReviewSection({
                                     </div>
                                 </div>
 
-                                <div>
+                                <div className="ps-3">
                                     <div
                                         ref={(el) => checkClamped(el, review.id)}
                                         className={`
@@ -344,7 +350,7 @@ export default function ReviewSection({
                                 <div className="flex justify-between items-center">
                                     <button
                                         type="button"
-                                        onClick={() => handleLikeReview(review.id, product.id)}
+                                        onClick={() => handleLikeReview(review.id, review.is_liked)}
                                         className={`
                                             group
                                             flex items-center gap-2
@@ -397,7 +403,7 @@ export default function ReviewSection({
                     ) : (
                         <div className="flex flex-col w-full items-center justify-center text-[#adaaaa]">
                             <MessageCircleX className='h-20 w-20 text-center text-[#99FF33] mb-4' />
-                            Belum ada ulasan terkait produk ini.
+                            Belum ada ulasan terkait produk ini. Jadilah yg pertama mengulas!
                         </div>
                     )}
                 </div>
@@ -409,11 +415,10 @@ export default function ReviewSection({
                 onClose={() => setShowLoginDialog(false)}
             />
 
-            <ConfirmationDialog
+            <DeleteConfirmationDialog
                 open={showDeleteDialog}
                 title="Hapus Ulasan"
                 description="Apakah Anda yakin ingin menghapus ulasan ini?"
-                confirmText="Hapus"
                 onConfirm={confirmDeleteReview}
                 onCancel={() => {
                     setShowDeleteDialog(false);

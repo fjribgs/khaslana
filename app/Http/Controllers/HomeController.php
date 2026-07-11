@@ -16,6 +16,8 @@ class HomeController extends Controller
             'productImages',
             'productVariants.attributeValues.attribute',
         ])
+        ->withAvg('reviews as product_rating', 'rating')
+        ->orderByDesc('product_rating')
         ->take(4)
         ->get();
 

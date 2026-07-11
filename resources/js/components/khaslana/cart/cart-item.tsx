@@ -1,4 +1,4 @@
-import { Trash2, Check } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import DefaultProduct from "@/assets/images/product/default-product.png";
 import { QuantityControl } from '@/components/khaslana/cart/quantity-control';
@@ -26,8 +26,33 @@ export const CartItem: React.FC<CartItemProps> = ({
     const product = variant?.product;
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-    const basePrice = variant?.price ?? 0;
-    const totalPrice = basePrice * item.quantity;
+    // 1. HARGA ASLI
+    const originalPrice = variant?.price ?? 0;
+
+    // 2. LOGIKA PERHITUNGAN DISKON
+    let finalItemPrice = originalPrice;
+    let isPromoActive = false;
+
+    // Check Product tidak null
+    const promoData = product?.promo;
+    const promo = Array.isArray(promoData) ? promoData[0] : promoData;
+
+    if (
+        promo &&
+        promo.status === 'BERLANGSUNG' &&
+        promo.type === 'DISKON' &&
+        promo.discount_percent
+    ) {
+        isPromoActive = true;
+    
+        finalItemPrice =
+            originalPrice -
+            (originalPrice * promo.discount_percent / 100);
+    
+        finalItemPrice = Math.max(0, finalItemPrice);
+    }
+
+    const totalPrice = finalItemPrice * item.quantity;
 
     const formatCurrency = (value: number) => {
         return new Intl.NumberFormat('id-ID', {
@@ -44,68 +69,99 @@ export const CartItem: React.FC<CartItemProps> = ({
         })
         .join(', ');
 
-    const imageUrl =
-        product?.product_images?.[0]?.image
-            ? `/storage/${product.product_images[0].image}`
-            : DefaultProduct;
+    const imageUrl = product?.product_images?.[0]?.image
+        ? `/storage/${product.product_images[0].image}`
+        : DefaultProduct;
 
     return (
         <>
-            <div className="flex justify-between gap-4 p-4 bg-[#121214] border border-[#202024] rounded-xl transition-all duration-200 hover:border-[#29292e]">
-
-                {/* LEFT */}
-                <div className="flex items-start flex-1 gap-4 min-w-0">
-                    
-                    {/* CHECKBOX */}
+            <div
+                className={`
+                    flex items-stretch gap-4 p-3 rounded-xl transition-all duration-200
+                    ${isSelected ? 'bg-[#29292e] shadow-md border border-[#3f3f46]' : 'bg-[#1a1a1e] hover:bg-[#202024] border border-transparent'}
+                    ${isEditMode ? 'opacity-90' : 'opacity-100'}
+                `}
+            >
+                {/* CHECKBOX */}
+                <div className="flex items-center">
                     <div
+                        className="relative flex items-center justify-center w-5 h-5 cursor-pointer"
                         onClick={() => onSelectToggle(item.id)}
-                        className={`
-                            w-5 h-5 rounded flex items-center justify-center
-                            border cursor-pointer transition
-                            ${isSelected
-                                ? 'bg-[#99ff33] border-[#99ff33]'
-                                : 'bg-[#1a1a1e] border-[#2a2a30]'
-                            }
-                        `}
                     >
-                        {isSelected && (
-                            <Check className="w-4 h-4 text-[#161619] stroke-[3]" />
-                        )}
-                    </div>
-
-                    {/* IMAGE */}
-                    <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-[#1c1c21] flex-shrink-0 border border-[#202024]">
-                        <img
-                            src={imageUrl}
-                            alt={product?.name ?? "Produk"}
-                            className="w-full h-full object-cover"
+                        <input
+                            type="checkbox"
+                            className="peer appearance-none w-5 h-5 border-2 border-[#4e4e54] rounded bg-transparent checked:bg-[#99ff33] checked:border-[#99ff33] transition-all cursor-pointer"
+                            checked={isSelected}
+                            readOnly
                         />
-                    </div>
-
-                    {/* INFO */}
-                    <div className="flex flex-col flex-1 min-w-0 pr-2">
-                        <h4 className="text-sm font-semibold text-[#f2f2f3] truncate tracking-wide">
-                            {product?.name ?? 'Produk Tidak Diketahui'}
-                        </h4>
-
-                        <p className="text-[12px] text-[#7c7c8a] mt-1 leading-tight">
-                            {variantAttributesText}
-                        </p>
-
-                        <div className="mt-3 w-fit max-w-[120px]">
-                            <QuantityControl
-                                quantity={item.quantity}
-                                stock={variant?.stock ?? 0}
-                                onChange={(newQuantity) => onQuantityChange(item.id, newQuantity)}
-                            />
-                        </div>
+                        <svg
+                            className="absolute w-3 h-3 text-black opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"
+                            viewBox="0 0 14 10"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path d="M1 5L4.5 8.5L13 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
                     </div>
                 </div>
 
-                {/* RIGHT */}
-                <div className="flex flex-col items-end flex-shrink-0 pl-2 min-w-[130px] gap-2">
+                {/* GAMBAR PRODUK */}
+                <div
+                    className="w-20 h-20 rounded-lg overflow-hidden shrink-0 cursor-pointer"
+                    onClick={() => onSelectToggle(item.id)}
+                >
+                    <img
+                        src={imageUrl}
+                        alt={product?.name || "Product Image"}
+                        className="w-full h-full object-cover"
+                    />
+                </div>
 
-                    {/* DELETE */}
+                {/* DETAIL PRODUK */}
+                <div className="flex-1 flex flex-col justify-between py-0.5 min-w-0">
+                    <div
+                        className="cursor-pointer space-y-1"
+                        onClick={() => onSelectToggle(item.id)}
+                    >
+                        <h3 className="text-sm font-semibold text-white truncate pr-2 leading-tight">
+                            {product?.name}
+                        </h3>
+                        {variantAttributesText && (
+                            <p className="text-xs text-[#7c7c8a] truncate">
+                                {variantAttributesText}
+                            </p>
+                        )}
+
+                        {/* HARGA PER ITEM */}
+                        <div className="flex flex-col">
+                            {isPromoActive ? (
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                    <span className="text-[11px] text-[#7c7c8a] line-through">
+                                        {formatCurrency(originalPrice)}
+                                    </span>
+                                    {promo?.type === 'DISKON' && (
+                                        <span className="text-[10px] font-bold text-[#FF4444] bg-[#FF4444]/10 px-1.5 py-0.5 rounded">
+                                            {promo.discount_percent}% OFF
+                                        </span>
+                                    )}
+                                </div>
+                            ) : null}
+                        </div>
+                    </div>
+
+                    <div className="mt-2 self-start w-fit max-w-[120px]">
+                        <QuantityControl
+                            quantity={item.quantity}
+                            stock={variant?.stock ?? 0}
+                            onChange={(newQuantity) =>
+                                onQuantityChange(item.id, newQuantity)
+                            }
+                        />
+                    </div>
+                </div>
+
+                {/* ACTIONS & TOTAL PRICE */}
+                <div className="flex flex-col items-end justify-between min-w-[90px]">
                     <button
                         type="button"
                         onClick={() => setIsDeleteOpen(true)}
@@ -121,11 +177,17 @@ export const CartItem: React.FC<CartItemProps> = ({
                         <Trash2 className="w-3.5 h-3.5" />
                     </button>
 
-                    {/* PRICE */}
                     <div className="text-right mt-auto">
-                        <div className="text-[11px] text-[#7c7c8a] mb-1">
-                            {formatCurrency(basePrice)} / unit
-                        </div>
+                        {isPromoActive ? (
+                            <div className="text-[11px] text-[#7c7c8a] mb-1 font-medium">
+                                {formatCurrency(finalItemPrice)} / unit
+                            </div>
+                        ) : (
+                            <div className="text-[11px] text-[#7c7c8a] mb-1">
+                                {formatCurrency(originalPrice)} / unit
+                            </div>
+                        )}
+                        
                         <div className="text-lg font-bold text-[#99ff33]">
                             {formatCurrency(totalPrice)}
                         </div>
@@ -133,7 +195,6 @@ export const CartItem: React.FC<CartItemProps> = ({
                 </div>
             </div>
 
-            {/* DIALOG */}
             <DeleteConfirmationDialog
                 open={isDeleteOpen}
                 title="Hapus Produk?"

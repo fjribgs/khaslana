@@ -1,5 +1,6 @@
 import type { ProductVariant } from '@/types/attribute';
 import type { Product } from '@/types/product';
+import { Order } from '@/types/order';
 
 export interface OrderItem {
     id: number;
@@ -16,6 +17,7 @@ export interface OrderItem {
     created_at: string;
     updated_at: string;
 
+    order?: Order;
     product?: Product;
     variant?: ProductVariant;
 }

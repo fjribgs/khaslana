@@ -1,3 +1,4 @@
+import { Link } from "@inertiajs/react";
 import { ShieldCheck, Truck } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
@@ -7,6 +8,7 @@ import DefaultProduct from "@/assets/images/product/default-product.png";
 import VariantDialog from "@/components/khaslana/catalog/detail/variant-dialog";
 import LoginRequiredDialog from '@/components/khaslana/login-required-dialog';
 import type { Product } from "@/types/product";
+import { detail } from "@/routes/umkm";
 
 interface HeroSectionProps {
     product: Product;
@@ -19,7 +21,6 @@ export default function HeroSection({
     const originalPrice = variant?.price ?? 0;
     const stock = variant?.stock ?? 0;
     const image = product.product_images?.[0]?.image;
-    const rating = product.umkm?.average_rating ?? 0;
     const formatPrice = (value: number) => new Intl.NumberFormat("id-ID").format(value);
     
     const [openVariant, setOpenVariant] = useState(false);
@@ -65,7 +66,6 @@ export default function HeroSection({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 {/* left section */}
                 <div className="relative">
-                    {/* --- UPDATE BADGE PROMO --- */}
                     {isPromoActive && (
                         <div
                             className="
@@ -101,7 +101,7 @@ export default function HeroSection({
 
                 {/* right section */}
                 <div className="flex flex-col justify-between">
-                    <div className="mt-4">
+                    <div className="mt-2">
                         <p
                             className="
                                 text-[#99FF33]
@@ -113,7 +113,7 @@ export default function HeroSection({
                         >
                             {product.category?.name}
                         </p>
-                        <h1 className="text-white text-5xl md:text-6xl font-bold leading-tight">
+                        <h1 className="text-white text-5xl md:text-6xl font-bold leading-tight break-words">
                             {product.name}
                         </h1>
                         <div className="flex items-center gap-3 mt-1 md:mt-3">
@@ -121,11 +121,13 @@ export default function HeroSection({
                                 {"★★★★★"}
                             </div>
                             <span className="text-gray-300 text-sm">
-                                {rating.toFixed(1)} Rating
+                                {product.product_rating ?? 0} Rating
                             </span>
                             <span className="text-gray-600">|</span>
                             <span className="text-gray-300 text-sm">
-                                {product.umkm?.store_name}
+                                <Link href={detail(product.umkm_id)}>
+                                    {product.umkm?.store_name}
+                                </Link>
                             </span>
                         </div>
                         
@@ -192,7 +194,7 @@ export default function HeroSection({
                                 </div>
                             )}
                         </div>
-                        <p className="mt-4 text-gray-400 text-base leading-8 line-clamp-6">
+                        <p className="mt-4 text-gray-400 text-base leading-8 line-clamp-6 break-words">
                             {product.description}
                         </p>
                     </div>

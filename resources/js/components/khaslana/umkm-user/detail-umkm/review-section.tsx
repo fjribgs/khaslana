@@ -1,13 +1,8 @@
 import { MessageSquareX } from "lucide-react";
 
+import DefaultProfile from "@/assets/icons/default-profile.png";
 import type { Umkm } from "@/types/umkm";
-
-interface Review {
-    id: number;
-    product_id: number;
-    rating: number;
-    comment: string;
-}
+import type { Review } from "@/types/review";
 
 interface ReviewSectionProps {
     umkmData: Umkm;
@@ -18,6 +13,7 @@ export default function ReviewSection({
     umkmData,
     reviews,
 }: ReviewSectionProps) {
+    console.log(reviews?.[0].user)
     return (
         <div className="flex flex-col mt-12 mb-20 gap-2">
             <h2 className="text-xl md:text-2xl font-bold">
@@ -34,23 +30,54 @@ export default function ReviewSection({
                     </p>
                 </div>
             ) : (
-                <div className="grid gap-4 mt-4">
-                    {reviews.map((review, index) => (
+                <div className="flex flex-col gap-4 mt-8">
+                    {reviews.map((review) => (
                         <div
-                            key={`${review.product_id}-${index}`}
-                            className="border rounded-xl p-4 bg-card"
+                            key={review.id}
+                            className="flex flex-col gap-5 bg-[#222] p-8 rounded-3xl"
                         >
-                            <div className="flex items-center gap-1 mb-2">
-                                {Array.from({ length: 5 }).map((_, i) => (
-                                    <span key={i}>
-                                        {i < review.rating ? "⭐" : "☆"}
-                                    </span>
-                                ))}
+                            <div className="flex items-center justify-between gap-5">
+                                <div className="flex items-center gap-5">
+                                    <img
+                                        src={
+                                            review.user.profile?.profile_photo
+                                                ? `/storage/${review.user.profile?.profile_photo}`
+                                                : DefaultProfile
+                                        }
+                                        alt="Profile"
+                                        className="w-10 h-10 rounded-full object-cover"
+                                    />
+
+                                    <div className="flex flex-col">
+                                        <h6 className="text-white font-medium text-lg">
+                                            {review.user.name}
+                                        </h6>
+
+                                        <p className="text-[#888] text-sm">
+                                            {new Date(
+                                                review.created_at
+                                            ).toLocaleDateString(
+                                                "id-ID",
+                                                {
+                                                    year: "numeric",
+                                                    month: "long",
+                                                    day: "numeric",
+                                                }
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex text-[#99FF33]">
+                                    {"★".repeat(review.rating)}
+                                </div>
                             </div>
 
-                            <p className="text-sm md:text-base text-muted-foreground">
-                                {review.comment}
-                            </p>
+                            <div>
+                                <p className="whitespace-pre-wrap break-words text-white">
+                                    {review.comment}
+                                </p>
+                            </div>
                         </div>
                     ))}
                 </div>
