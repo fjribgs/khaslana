@@ -13,7 +13,6 @@ export default function ReviewSection({
     umkmData,
     reviews,
 }: ReviewSectionProps) {
-    console.log(reviews?.[0].user)
     return (
         <div className="flex flex-col mt-12 mb-20 gap-2">
             <h2 className="text-xl md:text-2xl font-bold">
