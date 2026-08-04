@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Umkm\Umkm;
 use App\Models\Order\Order;
 use App\Models\Order\OrderItem;
 use App\Models\Product\Product;
@@ -15,6 +16,7 @@ class DashboardController extends Controller
     public function index() {
         $user = Auth::user();
         $umkmId = $user->umkm?->id;
+        $umkm = Umkm::where('id', $umkmId)->firstOrFail();
 
         $umkmStat = Order::query()
             ->where('umkm_id', $umkmId)
@@ -30,11 +32,13 @@ class DashboardController extends Controller
             ->where('umkm_id', $umkmId)
             ->where('is_archived', false)
             ->count();
-        
-        $storeRating = Product::query()
-            ->where('umkm_id', $umkmId)
-            ->withAvg('reviews', 'rating')
-            ->get();
+
+        $storeRating = $umkm->average_rating;
+
+        // $storeRating = Product::query()
+        //     ->where('umkm_id', $umkmId)
+        //     ->withAvg('reviews', 'rating')
+        //     ->get();
 
         $topProducts = Product::query()
             ->where('umkm_id', $umkmId)

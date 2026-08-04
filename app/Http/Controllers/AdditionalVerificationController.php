@@ -7,13 +7,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use App\Models\UMKM\UmkmData;
 use Inertia\Inertia;
 
 class AdditionalVerificationController extends Controller
 {
     public function index() {
+        $requestedUmkm = UmkmData::with([
+            'umkm.user',
+            'umkm.umkmImages',
+            'umkm.umkmLocations',
+        ])
+        ->where('is_verified', 'PENDING')
+        ->get();
+
         $umkm = Umkm::with([
             'user',
             'umkmData',
@@ -50,6 +57,7 @@ class AdditionalVerificationController extends Controller
                 )
                 : null,
             ],
+            'requestedUmkm' => $requestedUmkm,
         ]);
     }
 
@@ -141,7 +149,6 @@ class AdditionalVerificationController extends Controller
                     'Alamat',
                     'Operasional',
                     'Foto',
-                    'Lokasi',
                 ],
             ];
         }
@@ -163,7 +170,8 @@ class AdditionalVerificationController extends Controller
             blank($umkm->city_id) ||
             blank($umkm->district_id) ||
             blank($umkm->village_id) ||
-            blank($umkm->address)
+            blank($umkm->address) ||
+            !$umkm->umkmLocations()->exists()
         ) {
             $missing[] = 'Alamat';
         }
@@ -178,10 +186,6 @@ class AdditionalVerificationController extends Controller
 
         if (!$umkm->umkmImages()->exists()) {
             $missing[] = 'Foto';
-        }
-
-        if (!$umkm->umkmLocations()->exists()) {
-            $missing[] = 'Lokasi';
         }
 
         return [

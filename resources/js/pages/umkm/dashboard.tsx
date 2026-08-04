@@ -29,17 +29,17 @@ interface UmkmStat {
     total_pembeli: number;
 }
 
-interface ProductWithRating {
-    id: number;
-    name: string;
-    reviews_avg_rating: string;
-}
+// interface ProductWithRating {
+//     id: number;
+//     name: string;
+//     reviews_avg_rating: string;
+// }
 
-interface StoreRating {
-    id: number;
-    name: string;
-    products: ProductWithRating[];
-}
+// interface StoreRating {
+//     id: number;
+//     name: string;
+//     products: ProductWithRating[];
+// }
 
 interface CategoryData {
     id: number;
@@ -65,7 +65,7 @@ interface DashboardProps {
     status: 'BUKA' | 'TUTUP';
     umkm_stat: UmkmStat;
     active_product: number;
-    store_rating: StoreRating[];
+    store_rating: number;
     top_products: TopProducts[];
     sales_chart: ChartItem[];
     latest_orders: Order[];
@@ -125,14 +125,14 @@ export default function Dashboard({
 
     const stat = umkm_stat || {total_pembeli: 0, total_pendapatan: 0};
     const product = active_product ?? 0;
-    const storeProduct = store_rating?.[0]?.products?.[0];
+    const storeProduct = store_rating;
 
     const storeStatistics = [
         {id: 1, title: 'Total Pembeli', 'value': stat.total_pembeli, 'icon': <ShoppingBag className='size-8'/>},
         {id: 2, title: 'Pendapatan', 'value': formatRupiah(Number(stat.total_pendapatan)), 'icon': <DollarSign className='size-8'/>},
         {id: 3, title: 'Produk aktif', 'value': product, 'icon': <Package className='size-8'/>},
-        {id: 4, title: 'Rating toko', 'value': storeProduct?.reviews_avg_rating
-            ? `${Number(storeProduct.reviews_avg_rating).toFixed(1)}/5.0`
+        {id: 4, title: 'Rating toko', 'value': storeProduct
+            ? `${Number(storeProduct).toFixed(1)}/5.0`
             : '0.0/5.0', 'icon': <Star className='size-8'/>},
     ]
 

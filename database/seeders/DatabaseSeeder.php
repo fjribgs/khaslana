@@ -17,11 +17,12 @@ class DatabaseSeeder extends Seeder
     {
         if(app()->environment('production')) {
             User::firstOrCreate([
-                'name' => 'Admin',
-                'username' => 'admin',
-                'email' => 'admin@khaslana.com',
+                'name' => 'Khaslana Superadmin',
+                'username' => 'superadmin',
+                'email' => 'superadmin@khaslana.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
+                'superadmin' => true,
             ]);
 
             User::create([
@@ -40,6 +41,8 @@ class DatabaseSeeder extends Seeder
                 // AttributeSeeder::class,
                 // ProductSeeder::class,
             ]);
+
+            User::where('username', 'superadmin')->update(['is_umkm' => true]);
         } else {
             User::factory()->create([
                 'name' => 'Test User',
@@ -62,6 +65,16 @@ class DatabaseSeeder extends Seeder
                 UmkmSeeder::class,
                 AttributeSeeder::class,
                 ProductSeeder::class,
+            ]);
+
+            User::firstOrCreate([
+                'name' => 'Khaslana Superadmin',
+                'username' => 'superadmin',
+                'email' => 'superadmin@khaslana.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'superadmin' => true,
+                'is_umkm' => true,
             ]);
         }
     }

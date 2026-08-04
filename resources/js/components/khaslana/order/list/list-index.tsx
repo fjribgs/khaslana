@@ -162,7 +162,7 @@ export default function ListIndex({
                                         border border-[#99ff33]
                                         text-[#99ff33]
                                         px-4 py-2
-                                        rounded-full mt-2
+                                        rounded-full
                                         text-sm font-semibold
                                         hover:text-black
                                         hover:bg-[#99ff33]

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -188,6 +189,7 @@ class StoreController extends Controller
                 ->with('success', 'Selamat!! Akun UMKM anda berhasil dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
+            Log::error($th);
 
             if ($filePath && Storage::disk('public')->exists($filePath)) {
                 Storage::disk('public')->delete($filePath);
