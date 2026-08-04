@@ -65,19 +65,7 @@ export interface Umkm {
         };
     };
 
-    umkm_data?: {
-        id: number;
-        npwp: string | null;
-        nib: string | null;
-        nik: string | null;
-        image_hash: string | null;
-        file_path: string | null;
-        is_verified:
-        | "UNVERIFIED"
-        | "PENDING"
-        | "VERIFIED"
-        | "REJECT";
-    };
+    umkm_data?: UmkmData;
 
     umkm_images?: {
         id: number;
@@ -98,4 +86,18 @@ export interface Umkm {
     }[];
 
     promos?: Promo[];
+}
+
+export interface UmkmData {
+    id: number;
+    npwp: string | null;
+    nib: string | null;
+    nik: string | null;
+    image_hash: string | null;
+    file_path: string | null;
+    is_verified:
+    | "UNVERIFIED"
+    | "PENDING"
+    | "VERIFIED"
+    | "REJECT";
 }

@@ -9,6 +9,7 @@ interface AuthProps extends PageProps {
             username: string,
             email: string,
             is_umkm: boolean | number,
+            superadmin: boolean,
             profile_photo?: string | null,
             logo?: string | null;
 

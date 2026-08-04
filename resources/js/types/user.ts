@@ -4,6 +4,7 @@ export interface User {
     username: string;
     email: string;
     is_umkm: boolean | number;
+    superadmin: boolean;
 
     profile?: {
         id: number;

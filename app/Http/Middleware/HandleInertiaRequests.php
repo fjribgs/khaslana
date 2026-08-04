@@ -46,6 +46,7 @@ class HandleInertiaRequests extends Middleware
                     'username' => $request->user()->username,
                     'email' => $request->user()->email,
                     'is_umkm' => $request->user()->is_umkm,
+                    'superadmin' => $request->user()->superadmin,
 
                     // relation table
                     'profile_photo' => $request->user()->profile?->profile_photo
