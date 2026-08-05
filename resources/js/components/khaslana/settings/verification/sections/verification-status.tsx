@@ -87,7 +87,6 @@ export default function VerificationStatus({
     if (verificationStatus === "verified") {
         return (
             <Card className="border-[#99FF33] bg-[#99FF33]/10 p-5">
-                <div className="flex flex-wrap items-center justify-between gap-3"></div>
                 <div className="flex-1">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                         <h3 className="text-lg font-semibold tracking-tight">

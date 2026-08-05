@@ -90,6 +90,7 @@ export interface Umkm {
 
 export interface UmkmData {
     id: number;
+    umkm_id: number;
     npwp: string | null;
     nib: string | null;
     nik: string | null;
@@ -100,4 +101,6 @@ export interface UmkmData {
     | "PENDING"
     | "VERIFIED"
     | "REJECT";
+
+    umkm: Umkm;
 }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UMKM\Umkm;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+
+use App\Models\UMKM\Umkm;
 use App\Models\UMKM\UmkmData;
 use Inertia\Inertia;
 
@@ -138,6 +140,25 @@ class AdditionalVerificationController extends Controller
                 'verification' => $e->getMessage(),
             ]);
         }
+    }
+
+    public function updateVerification(Request $request, UmkmData $umkmData) {
+        $validated = $request->validate([
+            'status' => [
+                'required',
+                Rule::in(['VERIFIED', 'REJECT']),
+            ],
+        ]);
+
+        $umkmData->update([
+            'is_verified' => $validated['status'],
+        ]);
+
+        return back()->with([
+            'success' => $validated['status'] === 'VERIFIED'
+                ? 'Data UMKM berhasil diverifikasi!'
+                : 'Data UMKM berhasil ditolak!',
+        ]);
     }
 
     private function checkStoreCompletion(?Umkm $umkm): array {

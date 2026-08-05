@@ -26,13 +26,14 @@ export default function VerifiedBadge({
                 border-[#99FF33]
                 bg-[#99FF33]/10
                 px-2.5 py-1
-                font-medium text-[#4A7C16]
-                hover:bg-[#99FF33]/15
+                font-medium text-[#99FF33]
+                hover:bg-[#99FF33]/10
+                cursor-default
             "
         >
             <ShieldCheck
                 size={iconSize}
-                className="text-[#73C000]"
+                className="text-[#99FF33]"
             />
            <span className={textClass}>
                 {text}
