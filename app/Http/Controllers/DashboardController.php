@@ -35,11 +35,6 @@ class DashboardController extends Controller
 
         $storeRating = $umkm->average_rating;
 
-        // $storeRating = Product::query()
-        //     ->where('umkm_id', $umkmId)
-        //     ->withAvg('reviews', 'rating')
-        //     ->get();
-
         $topProducts = Product::query()
             ->where('umkm_id', $umkmId)
             ->with([

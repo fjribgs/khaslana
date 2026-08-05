@@ -22,7 +22,9 @@ class UmkmController extends Controller
             'umkmData',
             'umkmImages',
             'umkmLocations',
-        )->get();
+        )
+        ->where('open_days', '!=', 'superadmin')
+        ->get();
 
         return Inertia::render('user/umkm', [
             'umkms' => $umkms,
