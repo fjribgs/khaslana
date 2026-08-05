@@ -32,6 +32,19 @@ class UmkmSeeder extends Seeder
                 'close_time' => '20.00',
                 'is_order_feature' => true,
             ],
+            [
+                'user_id' => 1,
+                'province_id' => 32,
+                'city_id' => 3215,
+                'district_id' => 321501,
+                'village_id' => 3215011001,
+                'store_name' => 'superadmin',
+                'description' => 'superadmin',
+                'type' => 'KELILING',
+                'address' => 'superadmin',
+                'phone_number' => '081212345678',
+                'open_days' => 'superadmin',
+            ],
         ];
 
         $umkmImages = [

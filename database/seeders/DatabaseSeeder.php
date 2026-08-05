@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'superadmin' => true,
+                'is_umkm' => true,
             ]);
 
             User::create([
@@ -42,12 +43,15 @@ class DatabaseSeeder extends Seeder
                 // ProductSeeder::class,
             ]);
 
-            User::where('username', 'superadmin')->update(['is_umkm' => true]);
+            // User::where('username', 'superadmin')->update(['is_umkm' => true]);
         } else {
-            User::factory()->create([
-                'name' => 'Test User',
-                'username' => 'test',
-                'email' => 'test@example.com',
+            User::firstOrCreate([
+                'name' => 'Khaslana Superadmin',
+                'username' => 'superadmin',
+                'email' => 'superadmin@khaslana.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'superadmin' => true,
             ]);
 
             User::create([
@@ -59,6 +63,12 @@ class DatabaseSeeder extends Seeder
                 'is_umkm' => true,
             ]);
 
+            User::factory()->create([
+                'name' => 'Test User',
+                'username' => 'test',
+                'email' => 'test@example.com',
+            ]);
+
             $this->call([
                 IndonesiaSeeder::class,
                 CategorySeeder::class,
@@ -67,15 +77,7 @@ class DatabaseSeeder extends Seeder
                 ProductSeeder::class,
             ]);
 
-            User::firstOrCreate([
-                'name' => 'Khaslana Superadmin',
-                'username' => 'superadmin',
-                'email' => 'superadmin@khaslana.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('password'),
-                'superadmin' => true,
-                'is_umkm' => true,
-            ]);
+            User::where('username', 'superadmin')->update(['is_umkm' => true]);
         }
     }
 }
