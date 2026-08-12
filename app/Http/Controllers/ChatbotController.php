@@ -116,7 +116,7 @@ class ChatbotController extends Controller
             - Mengelola katalog produk.
             - Mengaktifkan fitur Live Tracking jika tipe UMKM tersebut adalah UMKM Keliling.
 
-            4. PopIn:
+            4. PopIn (MAIN FEATURE):
             - Ketika diaktifkan, lokasi UMKM akan dikirim secara realtime.
             - Status UMKM menjadi "Mangkal".
             - Pengguna dapat melihat posisi UMKM pada peta.

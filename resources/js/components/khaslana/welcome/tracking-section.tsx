@@ -21,20 +21,20 @@ export default function TrackkingSection() {
         }
     }
     return (
-        <section className="px-6 lg:px-[55px] pb-20 flex justify-center items-center z-10">
-            <div className="max-w-[1400px] w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+        <section className="px-6 lg:px-13.75 pb-20 flex justify-center items-center z-10">
+            <div className="max-w-350 w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
                 <div className="flex flex-col gap-6 lg:gap-8 order-1 lg:order-2 flex-1 text-left lg:text-left">
                     <h2 className="text-white text-4xl sm:text-4xl lg:text-5xl xl:text-[64px] font-medium leading-tight">
                         Nikmati Fitur <br className="block" />
                         <span className="text-[#99ff33]">
-                            Live Tracking{" "}
+                            PopIn{" "}
                             <br className="hidden lg:block" />
                             Merchant.
                         </span>
                     </h2>
                     <p className="text-white text-sm sm:text-base leading-7 max-w-lg">
                         Pernahkah Anda mencari penjual langganan, namun tidak tahu keberadaannya hari ini? 
-                        Dengan fitur Live Tracking, lokasi penjual dapat dipantau secara langsung melalui 
+                        Dengan fitur PopIn dari Khaslana, lokasi penjual dapat dipantau secara langsung melalui 
                         aplikasi — kapan saja, di mana saja.
                     </p>
                     <div
@@ -107,13 +107,13 @@ export default function TrackkingSection() {
                                     <span className="text-[10px] opacity-60 block">
                                         Revenue
                                     </span>
-                                    <strong>Rp 2.4M</strong>
+                                    <strong>Rp 10K</strong>
                                 </div>
                                 <div className="flex-1 bg-[#111] p-2 rounded-md">
                                     <span className="text-[10px] opacity-60 block">
                                         Orders
                                     </span>
-                                    <strong>48</strong>
+                                    <strong>2</strong>
                                 </div>
                             </div>
                             <button className="w-full p-2 rounded-md bg-[#222] text-white text-xs">
