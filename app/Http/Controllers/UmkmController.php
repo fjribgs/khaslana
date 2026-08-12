@@ -177,6 +177,7 @@ class UmkmController extends Controller
                     'longitude' => $latestLocation ? (float) $latestLocation->longitude : 0,
                     'distance' => $distance,
                     'isActive' => true,
+                    'lastUpdate' => $latestLocation->created_at,
                 ];
             })
             ->filter()

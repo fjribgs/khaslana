@@ -1,4 +1,5 @@
 import { MapPin, Star } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export interface MerchantSidebarData {
     id: number;
@@ -7,6 +8,7 @@ export interface MerchantSidebarData {
     locationText: string; 
     rating: number;
     status: 'MANGKAL' | 'KELILING' | 'TUTUP';
+    lastUpdate: string;
 }
 
 interface Props {
@@ -20,6 +22,66 @@ export default function MerchantSidebar({
     selectedMerchantId,
     onSelectMerchant
 }: Props) {
+    const [now, setNow] = useState(() => Date.now());
+
+    useEffect(() => {
+        let timeout: ReturnType<typeof setTimeout>;
+
+        const update = () => {
+            setNow(Date.now());
+
+            timeout = setTimeout(update, 1000);
+        };
+
+        timeout = setTimeout(update, 1000);
+
+        return () => clearTimeout(timeout);
+    }, []);
+
+    if (merchants.length === 0) {
+        return null;
+    }
+
+    const getRelativeTime = (date: string | Date) => {
+        const diff = Math.floor(
+            (now - new Date(date).getTime()) / 1000
+        );
+
+        if (diff < 0) return "baru saja";
+
+        if (diff < 60) {
+            return `${diff} detik lalu`;
+        }
+
+        const minutes = Math.floor(diff / 60);
+
+        if (minutes < 60) {
+            return `${minutes} menit lalu`;
+        }
+
+        const hours = Math.floor(minutes / 60);
+
+        if (hours < 24) {
+            return `${hours} jam lalu`;
+        }
+
+        const days = Math.floor(hours / 24);
+
+        if (days < 30) {
+            return `${days} hari lalu`;
+        }
+
+        const months = Math.floor(days / 30);
+
+        if (months < 12) {
+            return `${months} bulan lalu`;
+        }
+
+        const years = Math.floor(months / 12);
+
+        return `${years} tahun lalu`;
+    };
+
     if (merchants.length === 0) {
         return null;
     }
@@ -87,6 +149,12 @@ export default function MerchantSidebar({
                                     <Star className="w-4 h-4 fill-[#99FF33] text-[#99FF33] mr-1.5" />
                                     {merchant.rating.toFixed(1)}
                                 </div>
+                            </div>
+                            <div className='flex items-center justify-start mt-1'>
+                                <span className='text-xs text-muted-foreground'>
+                                    Terakhir diupdate{` `}
+                                    {getRelativeTime(merchant.lastUpdate)}
+                                </span>
                             </div>
                         </button>
                     );

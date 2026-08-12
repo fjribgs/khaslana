@@ -21,6 +21,7 @@ interface IncomingActiveMerchant {
     latitude: number;
     longitude: number;
     isActive: boolean;
+    lastUpdate: string;
 
     user?: {
         id: number;
@@ -42,7 +43,12 @@ interface Props {
     hasFiltered: boolean;
 }
 
-export default function UserStayPoint({ activeMerchants, initialSelectedId, hasFiltered }: Props) {
+export default function UserStayPoint({
+    activeMerchants,
+    initialSelectedId,
+    hasFiltered
+}: Props) {
+    console.log(activeMerchants)
     const [userLoc, setUserLoc] = useState<[number, number] | null>(null);
     const [selectedId, setSelectedId] = useState<number | null>(initialSelectedId);
     const [routePath, setRoutePath] = useState<[number, number][]>([]);
@@ -214,7 +220,8 @@ export default function UserStayPoint({ activeMerchants, initialSelectedId, hasF
         description: m.description,
         locationText: m.locationText,
         rating: m.rating,
-        status: m.status
+        status: m.status,
+        lastUpdate: m.lastUpdate,
     }));
 
     const mapMerchantsData: MerchantMapData[] = activeMerchants.map((merchant) => ({
@@ -299,7 +306,7 @@ export default function UserStayPoint({ activeMerchants, initialSelectedId, hasF
             />
 
             {/* OVERLAY */}
-            <div className="absolute top-24 left-4 z-[1000] flex flex-col gap-[15px] w-[calc(100%-32px)] max-w-[360px] max-h-[calc(100vh-120px)] pointer-events-none">
+            <div className="absolute top-24 left-4 z-[1000] flex flex-col gap-3.75 w-[calc(100%-32px)] max-w-90 max-h-[calc(100vh-120px)] pointer-events-none">
                 
                 <div className="pointer-events-auto flex flex-col overflow-hidden min-h-0">
                     <MerchantSidebar 
