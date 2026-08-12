@@ -142,7 +142,7 @@ export default function StayPointMap({
         return (
             <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
                 <MapPin className="w-12 h-12 mb-3 opacity-20" />
-                <p>Klik "Buka" untuk menyalakan Stay Point</p>
+                <p>Klik "Buka" untuk menyalakan PopIn</p>
             </div>
         );
     }

@@ -21,7 +21,7 @@ export default function ChatbotIndex() {
 
     const suggestions = [
         "Bagaimana cara mendaftar menjadi UMKM?",
-        "Apa itu Stay Point?",
+        "Apa itu PopIn?",
         "Bagaimana cara menambahkan produk?",
         "Apa itu Komunitas yang ada di Khaslana?",
         "Bagaimana cara mengaktifkan status mangkal?",
@@ -103,7 +103,7 @@ export default function ChatbotIndex() {
                                 Asisten UMKM
                             </h1>
                             <p className="mt-3max-w-xl text-center text-zinc-400">
-                                Tanyakan apa saja tentang penggunaan aplikasi, Stay Point, produk, lokasi UMKM, dan fitur lainnya.
+                                Tanyakan apa saja tentang penggunaan aplikasi, PopIn, produk, lokasi UMKM, dan fitur lainnya.
                             </p>
                             <div className="mt-10 flex flex-wrap justify-center gap-3">
                                 {suggestions.map(

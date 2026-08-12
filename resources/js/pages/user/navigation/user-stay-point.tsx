@@ -50,6 +50,7 @@ export default function UserStayPoint({ activeMerchants, initialSelectedId, hasF
     const hasAutoRoutedRef = React.useRef(false);
     const selectedMerchant = activeMerchants.find(m => m.id === selectedId);
     const [dataReady, setDataReady] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // GPS Auto-Fetch & Synchronizer
     const [hasFetched, setHasFetched] = useState(false);
@@ -131,8 +132,10 @@ export default function UserStayPoint({ activeMerchants, initialSelectedId, hasF
 
     // FETCH ROUTE 
     const handleFetchRoute = useCallback(async (targetLat: number, targetLng: number) => {
+        setLoading(true);
         if (!userLoc || !Array.isArray(userLoc) || userLoc[0] == null || userLoc[1] == null) {
             showErrorToast("Sedang mencari lokasi GPS Anda... Mohon tunggu sebentar.");
+            setLoading(false);
             return;
         }
 
@@ -156,6 +159,8 @@ export default function UserStayPoint({ activeMerchants, initialSelectedId, hasF
         } catch (error) {
             console.error("Gagal menjahit rute OSRM:", error);
             showErrorToast("Server navigasi sedang sibuk atau gangguan. Silakan coba lagi beberapa saat.");
+        } finally {
+            setLoading(false);
         }
     }, [userLoc]);
 
@@ -328,6 +333,7 @@ export default function UserStayPoint({ activeMerchants, initialSelectedId, hasF
                             }}
                             onCancelClick={handleCancelTracking}
                             onClose={handleCloseCard}
+                            loading={loading}
                         />
                     </div>
                 )}

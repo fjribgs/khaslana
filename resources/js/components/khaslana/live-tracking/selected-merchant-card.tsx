@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { ChevronRight, Star, X } from 'lucide-react';
+import { ChevronRight, Star, X, Loader2 } from 'lucide-react';
 import DefaultStore from '@/assets/images/umkm-user/default-store.png';
 
 export interface SelectedMerchantData {
@@ -15,6 +15,7 @@ interface Props {
     onTrackClick: () => void;
     onCancelClick: () => void;
     onClose: () => void;
+    loading: boolean;
 }
 
 export default function SelectedMerchantCard({ 
@@ -22,27 +23,37 @@ export default function SelectedMerchantCard({
     isTracking, 
     onTrackClick, 
     onCancelClick, 
-    onClose 
+    onClose,
+    loading,
 }: Props) {
     if (!merchant) return null;
 
     const finalLogo = merchant.logo ? `/storage/${merchant.logo}` : DefaultStore;
 
     return (
-        <div className="w-full shrink-0 bg-[#2A2A2A]/90 backdrop-blur-xl rounded-[24px] border border-white/5 shadow-2xl p-5 animate-in slide-in-from-bottom-6 fade-in duration-300 relative">
-            
+        <div
+            className="
+                w-full shrink-0
+                bg-[#2A2A2A]/90 backdrop-blur-xl
+                rounded-2xl relative
+                border border-white/5
+                shadow-2xl p-5
+                animate-in slide-in-from-bottom-6
+                fade-in duration-300
+            "
+        >
             <button 
                 onClick={onClose}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-white hover:text-red-400 transition-colors z-10 cursor-pointer"
             >
                 <X className="w-4 h-4" />
             </button>
 
             {/* card */}
-            <div className="flex items-center gap-[15px] mb-5 mt-1">
+            <div className="flex items-center gap-3.75 mb-5 mt-1">
                 
                 {/* left section */}
-                <div className="w-16 h-16 rounded-[16px] overflow-hidden shrink-0 border border-white/5 bg-[#161616]">
+                <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-white/5 bg-[#161616]">
                     <img 
                         src={finalLogo} 
                         alt={merchant.storeName} 
@@ -63,7 +74,7 @@ export default function SelectedMerchantCard({
                         </Link>
                     </div>
                     <div className="flex items-end justify-between w-full mt-1">
-                        <h3 className="text-[#99FF33] font-bold text-[18px] truncate max-w-[140px] leading-tight">
+                        <h3 className="text-[#99FF33] font-bold text-[18px] truncate max-w-35 leading-tight">
                             {merchant.storeName}
                         </h3>
                         <div className="flex items-center gap-2 pr-5">
@@ -103,8 +114,21 @@ export default function SelectedMerchantCard({
             ) : (
                 <button 
                     onClick={onTrackClick}
-                    className="w-full py-3 rounded-[14px] font-bold text-[14px] bg-[#99FF33] text-black shadow-[0_4px_20px_rgba(153,255,51,0.25)] hover:bg-[#8ae62e] transition-all duration-200"
+                    className="
+                        w-full py-3 rounded-[14px]
+                        font-bold text-[14px]
+                        bg-[#99FF33] text-black
+                        shadow-[0_4px_20px_rgba(153,255,51,0.25)]
+                        hover:bg-transparent hover:text-white
+                        transition-all duration-200
+                        border border-[#99FF33]
+                        cursor-pointer gap-1.5
+                        flex items-center justify-center
+                    "
                 >
+                    {loading && (
+                        <Loader2 className='size-4 mb-0.5' />
+                    )}
                     Lacak Toko
                 </button>
             )}

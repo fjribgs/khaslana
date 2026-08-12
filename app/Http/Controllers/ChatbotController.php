@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Product\Product;
 use App\Models\UMKM\Umkm;
 use App\Models\Order\Order;
-use App\Models\Order\OrderItem;
-use App\Models\Order\Payment;
 use App\Services\GeminiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -108,7 +106,7 @@ class ChatbotController extends Controller
             - Menyimpan UMKM favorit.
             - Melihat katalog produk UMKM.
             - Membeli produk UMKM.
-            - Melihat atau tracking UMKM yang berkeliling dengan nama fitur Stay Point (unique value khaslana).
+            - Melihat atau tracking UMKM keliling yang sedang mangkal/membagikan lokasinya dengan nama fitur PopIn (unique value khaslana).
             - Berbincang dengan UMKM atau pengguna lain melalui fitur Komunitas (seperti media sosial di dalam platform Khaslana)
 
             3. Pemilik UMKM dapat:
@@ -118,7 +116,7 @@ class ChatbotController extends Controller
             - Mengelola katalog produk.
             - Mengaktifkan fitur Live Tracking jika tipe UMKM tersebut adalah UMKM Keliling.
 
-            4. Stay Point:
+            4. PopIn:
             - Ketika diaktifkan, lokasi UMKM akan dikirim secara realtime.
             - Status UMKM menjadi "Mangkal".
             - Pengguna dapat melihat posisi UMKM pada peta.

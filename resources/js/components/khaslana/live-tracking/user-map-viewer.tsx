@@ -50,7 +50,7 @@ const createStoreProfileIcon = (logo: string | null, storeName: string, isActive
         className: 'bg-transparent',
         html: `
             <div class="flex flex-col items-center justify-center cursor-pointer -mt-4">
-                <div class="w-11 h-11 rounded-full p-[2px] shadow-lg flex items-center justify-center transition-transform hover:scale-110" 
+                <div class="w-11 h-11 rounded-full p-0.5 shadow-lg flex items-center justify-center transition-transform hover:scale-110" 
                      style="background-color: ${borderColor};">
                     <img 
                         src="${finalLogo}" 
@@ -59,7 +59,7 @@ const createStoreProfileIcon = (logo: string | null, storeName: string, isActive
                         onerror="this.src='/images/default-store.png';"
                     />
                 </div>
-                <div class="mt-1 bg-[#1A1A1A]/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-md border border-white/10 shadow-md whitespace-nowrap max-w-[100px] truncate text-center">
+                <div class="mt-1 bg-[#1A1A1A]/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-md border border-white/10 shadow-md whitespace-nowrap max-w-25 truncate text-center">
                     ${storeName}
                 </div>
             </div>

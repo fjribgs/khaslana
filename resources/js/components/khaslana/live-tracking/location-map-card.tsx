@@ -48,7 +48,7 @@ export default function LocationMapCard({ umkmData, locationData }: Props) {
     // Validasi pake realLocationData
     if (!realLocationData || realLocationData.latitude === null || realLocationData.longitude === null) {
         return (
-            <div className="w-full h-[300px] bg-[#2A2A2A] rounded-3xl flex items-center justify-center border border-white/10 text-gray-400">
+            <div className="w-full h-75 bg-[#2A2A2A] rounded-3xl flex items-center justify-center border border-white/10 text-gray-400">
                 Waduh, UMKM Belum Pernah Mangkal!
             </div>
         );
@@ -173,7 +173,7 @@ export default function LocationMapCard({ umkmData, locationData }: Props) {
     };
 
     return (
-        <div className="relative w-full h-[300px] md:h-[350px] rounded-3xl overflow-hidden border-2 border-white/5 group">
+        <div className="relative w-full h-75 md:h-87.5 rounded-3xl overflow-hidden border-2 border-white/5 group">
             
             <MapContainer 
                 center={[lat, lng]} 
@@ -191,7 +191,7 @@ export default function LocationMapCard({ umkmData, locationData }: Props) {
                 <Marker position={[lat, lng]} icon={NeonPinIcon} />
             </MapContainer>
 
-            <div className="absolute bottom-4 left-4 right-4 z-[400]">
+            <div className="absolute bottom-4 left-4 right-4 z-400">
                 <div className="bg-[#2A2A2A]/95 backdrop-blur-md border border-white/10 p-4 md:px-6 rounded-2xl flex items-center justify-between shadow-2xl">
                     <div className="flex flex-col truncate pr-4">
                         <h3 className="text-white font-bold text-lg truncate">

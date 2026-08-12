@@ -99,7 +99,7 @@ export default function MapViewer({ nodes, onPinClick }: Props) {
     const defaultCenter: [number, number] = [-6.9272, 107.7471];
 
     return (
-        <div className="w-full h-[400px] lg:h-[450px] bg-[#242424] rounded-xl overflow-hidden border-2 border-[#99FF33]/10 z-0 relative">
+        <div className="w-full h-100 lg:h-112.5 bg-[#242424] rounded-xl overflow-hidden border-2 border-[#99FF33]/10 z-0 relative">
             <MapContainer 
                 center={nodes.length > 0 ? [nodes[0].latitude, nodes[0].longitude] : defaultCenter} 
                 zoom={15} 

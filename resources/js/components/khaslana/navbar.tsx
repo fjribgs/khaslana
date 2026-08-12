@@ -47,7 +47,7 @@ export default function Navbar() {
             { id: 2, name: "UMKM", href: umkm().url },
             { id: 3, name: "Katalog", href: catalog().url },
             { id: 4, name: "Komunitas", href: community().url },
-            { id: 5, name: "Stay Point", href: tracking().url },
+            { id: 5, name: "PopIn", href: tracking().url },
             // ...(user.is_umkm
             //     ? [{ id: 5, name: "Kelola Toko", href: dashboard().url }]
             //     : []),

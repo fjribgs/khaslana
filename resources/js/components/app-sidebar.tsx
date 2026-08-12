@@ -44,7 +44,7 @@ export function AppSidebar() {
         ...(user?.is_umkm && user?.umkm?.type === 'KELILING'
             ? [
                 {
-                    title: 'Stay Point',
+                    title: 'PopIn',
                     href: stayPoint(),
                     icon: MapPin,
                 },

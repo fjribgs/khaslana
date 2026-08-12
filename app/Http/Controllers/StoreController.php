@@ -180,6 +180,8 @@ class StoreController extends Controller
                 }
             }
 
+            Log::error('error');
+
             $user->update(['is_umkm' => true]);
 
             DB::commit();

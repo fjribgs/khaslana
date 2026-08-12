@@ -18,7 +18,7 @@ import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Stay Point',
+        title: 'PopIn',
         href: stayPoint().url
     },
 ];
@@ -67,19 +67,6 @@ export default function StayPoint({
             }
         });
     };
-
-    // const handleToggleLocationStatus = (locStatus: StatusType) => {
-    //     const newStatusLokasi = locStatus;
-
-    //     router.post(storeStatusRoute(), {
-    //         statusLokasi: newStatusLokasi,
-    //     }, {
-    //         preserveScroll: true,
-    //         onSuccess: () => {
-    //             showSuccessToast('Status toko berhasil diubah!');
-    //         }
-    //     });
-    // };
 
     // 2. FUNGSI LOGIKA (API & GPS)
     const handleBuka = () => {
@@ -152,7 +139,7 @@ export default function StayPoint({
                     });
                     fetchAddress(currentLat, currentLng);
                     setModalConfig({
-                        title: 'Yeay Stay Point Sudah Aktif!',
+                        title: 'Yeay PopIn Sudah Aktif!',
                         desc: 'Costumer dapat melacak lokasi anda',
                         type: 'success'
                     });
@@ -206,7 +193,7 @@ export default function StayPoint({
 
     const handleTutup = () => {
         setModalConfig({
-            title: 'Yakin Menutup Stay Point?',
+            title: 'Yakin Menutup PopIn?',
             desc: 'Costumer tidak akan mengetahui lokasi anda',
             type: 'danger'
         });
@@ -309,7 +296,7 @@ export default function StayPoint({
     // 3. RENDER UI
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title='Stay Point' />
+            <Head title='PopIn' />
             {!user.is_umkm ? (
                 <CtaCard />
             ) : (
@@ -337,13 +324,13 @@ export default function StayPoint({
                         </div>
 
                         {/* Komponen Peta */}
-                        <div className="w-full h-full flex-1 min-h-[200px] bg-[#242424] rounded-[24px] overflow-hidden border-2 border-[#99FF33]/10 relative z-0">
+                        <div className="w-full h-full flex-1 min-h-50 bg-[#242424] rounded-2xl overflow-hidden border-2 border-[#99FF33]/10 relative z-0">
                             
                             {/* Tombol Overlay Rute (Muncul kalau status gak TUTUP) */}
                             {statusToko !== 'TUTUP' && position && (
                                 <button 
                                     onClick={toggleRouteLayer}
-                                    className={`absolute top-4 right-4 z-[999] p-3 rounded-xl shadow-lg border border-white/10 transition-all ${showRouteLayer ? 'bg-[#99FF33] text-black' : 'bg-[#1C1A24] text-white hover:bg-[#2A2A2A]'}`}
+                                    className={`absolute top-4 right-4 z-999 p-3 rounded-xl shadow-lg border border-white/10 transition-all ${showRouteLayer ? 'bg-[#99FF33] text-black' : 'bg-[#1C1A24] text-white hover:bg-[#2A2A2A]'}`}
                                     title="Tampilkan Rute Mangkal"
                                 >
                                     <MapIcon className="w-6 h-6" strokeWidth={2} />
@@ -393,7 +380,7 @@ export default function StayPoint({
                     </div>
 
                     {/* Komponen Modal Global */}
-                    <StayPointModal 
+                    <StayPointModal
                         isOpen={showModal} 
                         config={modalConfig} 
                         isLoading={isLoading} 
