@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Umkm\Umkm;
 use App\Models\Order\Order;
 use App\Models\Order\OrderItem;
 use App\Models\Product\Product;
@@ -15,8 +14,13 @@ class DashboardController extends Controller
 {
     public function index() {
         $user = Auth::user();
-        $umkmId = $user->umkm?->id;
-        $umkm = Umkm::where('id', $umkmId)->firstOrFail();
+
+        if (!$user->is_umkm) {
+            return Inertia::render('umkm/dashboard');
+        }
+
+        $umkm = $user->umkm;
+        $umkmId = $umkm->id;
 
         $umkmStat = Order::query()
             ->where('umkm_id', $umkmId)
