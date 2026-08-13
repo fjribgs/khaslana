@@ -18,22 +18,43 @@ export default function StayPointInfoCard({
     onToggleLastPin
 }: Props) {
     return (
-        <div className="mt-4 bg-[#1C1A24] rounded-[24px] p-5 lg:p-6 border border-white/5 shrink-0">
+        <div className="mt-4 bg-[#E0ECD2] dark:bg-[#1E1B26] rounded-2xl p-5 lg:p-6 border border-white/5 shrink-0">
             <div className="flex flex-col gap-3 lg:gap-4">
-                
                 <div className="flex items-center text-sm lg:text-base">
-                    <span className="text-[#8B8B8B] w-20 font-medium">Status :</span>
-                    <span className={`font-semibold ${statusToko === 'TUTUP' ? 'text-red-500' : 'text-[#99FF33]'}`}>
+                    <span className="dark:text-white w-20 font-medium">
+                        Status :
+                    </span>
+                    <span
+                        className={`
+                            font-semibold
+                            ${statusToko === 'TUTUP'
+                                ? 'text-red-500'
+                                : 'dark:text-[#99FF33]'
+                            }
+                        `}
+                    >
                         {statusToko === 'BUKA' ? 'Standby' : statusToko.charAt(0) + statusToko.slice(1).toLowerCase()}
                     </span>
                 </div>
                 
                 <div className="flex flex-col text-sm lg:text-base gap-2">
-                    <span className="text-[#8B8B8B] font-medium">
+                    <span className="dark:text-white font-medium">
                         {statusLokasi === 'KELILING' ? 'Lokasi Mangkal Sebelumnya :' : 'Lokasi Saat Ini :'}
                     </span>
-                    <div className="bg-[#242424] p-3.5 lg:p-4 rounded-xl border border-white/5 text-[#D1D1D1] min-h-[50px] leading-relaxed w-full">
-                        {statusLokasi === 'KELILING' ? (prevAddress || 'Memuat data sebelumnya...') : address}
+                    <div className="
+                        bg-[#E0ECD2] dark:bg-[#242424]
+                        p-3.5 lg:p-4
+                        rounded-xl
+                        border-2 border-white dark:border-white/5
+                        dark:text-[#D1D1D1]
+                        min-h-12.5 w-full
+                        leading-relaxed shadow
+                        "
+                    >
+                        {statusLokasi === 'KELILING'
+                            ? (prevAddress || 'Memuat data sebelumnya...')
+                            : address
+                        }
                     </div>
                     
                     {hasPrevPosition && (

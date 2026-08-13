@@ -140,8 +140,8 @@ export default function StayPointMap({
     // Placeholder Klo Posisi Kosong
     if (!position) {
         return (
-            <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
-                <MapPin className="w-12 h-12 mb-3 opacity-20" />
+            <div className="w-full h-full flex flex-col items-center justify-center dark:text-gray-500">
+                <MapPin className="w-12 h-12 mb-3 dark:opacity-20" />
                 <p>Klik "Buka" untuk menyalakan PopIn</p>
             </div>
         );

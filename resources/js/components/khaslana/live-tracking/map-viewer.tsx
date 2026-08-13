@@ -1,7 +1,7 @@
 import axios from 'axios';
 import L from 'leaflet';
 import { MapPin } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';

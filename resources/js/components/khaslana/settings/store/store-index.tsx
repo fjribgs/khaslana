@@ -220,7 +220,8 @@ export default function StoreIndex({
                             min-w-full
                             flex-nowrap
                             gap-2
-                            bg-[#1E1B26]
+                            bg-[#E0ECD2]
+                            dark:bg-[#1E1B26]
                             p-1
                         "
                     >
@@ -230,9 +231,11 @@ export default function StoreIndex({
                                 shrink-0 px-4!
                                 whitespace-nowrap
                                 data-[state=active]:bg-[#99FF33]!
-                                data-[state=active]:text-black!
+                                data-[state=active]:text-gray-900!
                                 data-[state=active]:hover:cursor-default!
-                                hover:text-[#99FF33]!
+                                data-[state=active]:dark:hover:text-gray-900!
+                                hover:text-gray-900
+                                dark:hover:text-[#99FF33]!
                                 hover:cursor-pointer!
                             "
                         >
@@ -246,9 +249,11 @@ export default function StoreIndex({
                                 shrink-0 px-4!
                                 whitespace-nowrap
                                 data-[state=active]:bg-[#99FF33]!
-                                data-[state=active]:text-black!
+                                data-[state=active]:text-gray-900!
                                 data-[state=active]:hover:cursor-default!
-                                hover:text-[#99FF33]!
+                                data-[state=active]:dark:hover:text-gray-900!
+                                hover:text-gray-900
+                                dark:hover:text-[#99FF33]!
                                 hover:cursor-pointer!
                             "
                         >
@@ -262,9 +267,11 @@ export default function StoreIndex({
                                 shrink-0 px-4!
                                 whitespace-nowrap
                                 data-[state=active]:bg-[#99FF33]!
-                                data-[state=active]:text-black!
+                                data-[state=active]:text-gray-900!
                                 data-[state=active]:hover:cursor-default!
-                                hover:text-[#99FF33]!
+                                data-[state=active]:dark:hover:text-gray-900!
+                                hover:text-gray-900
+                                dark:hover:text-[#99FF33]!
                                 hover:cursor-pointer!
                             "
                         >
@@ -278,9 +285,11 @@ export default function StoreIndex({
                                 shrink-0 px-4!
                                 whitespace-nowrap
                                 data-[state=active]:bg-[#99FF33]!
-                                data-[state=active]:text-black!
+                                data-[state=active]:text-gray-900!
                                 data-[state=active]:hover:cursor-default!
-                                hover:text-[#99FF33]!
+                                data-[state=active]:dark:hover:text-gray-900!
+                                hover:text-gray-900
+                                dark:hover:text-[#99FF33]!
                                 hover:cursor-pointer!
                             "
                         >
@@ -294,9 +303,11 @@ export default function StoreIndex({
                                 shrink-0 px-4!
                                 whitespace-nowrap
                                 data-[state=active]:bg-[#99FF33]!
-                                data-[state=active]:text-black!
+                                data-[state=active]:text-gray-900!
                                 data-[state=active]:hover:cursor-default!
-                                hover:text-[#99FF33]!
+                                data-[state=active]:dark:hover:text-gray-900!
+                                hover:text-gray-900
+                                dark:hover:text-[#99FF33]!
                                 hover:cursor-pointer!
                             "
                         >
@@ -311,7 +322,9 @@ export default function StoreIndex({
                                 data-[state=active]:bg-[#99FF33]!
                                 data-[state=active]:text-black!
                                 data-[state=active]:hover:cursor-default!
-                                hover:text-[#99FF33]!
+                                data-[state=active]:dark:hover:text-gray-900!
+                                hover:text-gray-900
+                                dark:hover:text-[#99FF33]!
                                 hover:cursor-pointer!
                             "
                         >
@@ -373,13 +386,11 @@ export default function StoreIndex({
                                     type="submit"
                                     disabled={form.processing}
                                     className={`
-                                        mt-2
-                                        bg-[#99FF33]
+                                        mt-2 cursor-pointer
+                                        bg-[#99FF33] hover:bg-[#1E1B26]
                                         border border-[#99FF33]
-                                        hover:bg-[#1E1B26]
-                                        hover:text-[#99FF33]
+                                        text-gray-900 hover:text-[#99FF33]
                                         transition-colors duration-200
-                                        hover:cursor-pointer
                                         ${!user.is_umkm && 'w-full'}
                                     `}
                                 >

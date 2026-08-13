@@ -119,9 +119,10 @@ export default function StoreLogo() {
                         className='
                             cursor-pointer
                             border-white/10
-                            bg-[#272431]
-                            text-white
-                            file:text-white
+                            bg-[#E0ECD2] dark:bg-[#272431]
+                            text-gray-900 dark:text-white
+                            file:text-gray-900 dark:file:text-white
+                            file:cursor-pointer
                         '
                         required
                     />
@@ -155,6 +156,7 @@ export default function StoreLogo() {
                             bg-[#99FF33]
                             border border-[#99FF33]
                             hover:bg-[#1E1B26]
+                            text-gray-900
                             hover:text-[#99FF33]
                             transition-colors duration-200
                             hover:cursor-pointer

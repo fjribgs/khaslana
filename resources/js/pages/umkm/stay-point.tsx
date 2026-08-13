@@ -15,6 +15,7 @@ import { showSuccessToast, showErrorToast } from '@/lib/toast';
 import { stayPoint } from '@/routes';
 import { storeStatusRoute } from '@/routes/dashboard';
 import type { BreadcrumbItem } from '@/types';
+import { dashboard } from '@/routes';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -305,7 +306,10 @@ export default function StayPoint({
                         
                         {/* Header & Tombol Power */}
                         <div className="flex items-center justify-between mb-4 shrink-0">
-                            <button onClick={() => router.visit('/dashboard')} className="flex items-center text-[#99FF33] font-semibold hover:opacity-80 transition">
+                            <button
+                                onClick={() => router.visit(dashboard())}
+                                className="flex items-center text-[#1E1B26] dark:text-[#99FF33] font-semibold hover:opacity-80 transition cursor-pointer"
+                            >
                                 <ChevronLeft className="w-5 h-5 mr-1" />
                                 Kembali
                             </button>
@@ -324,7 +328,7 @@ export default function StayPoint({
                         </div>
 
                         {/* Komponen Peta */}
-                        <div className="w-full h-full flex-1 min-h-50 bg-[#242424] rounded-2xl overflow-hidden border-2 border-[#99FF33]/10 relative z-0">
+                        <div className="w-full h-full flex-1 min-h-50 bg-[#E0ECD2] dark:bg-[#242424] rounded-2xl overflow-hidden border-2 border-[#E0ECD2] dark:border-[#99FF33]/10 relative z-0">
                             
                             {/* Tombol Overlay Rute (Muncul kalau status gak TUTUP) */}
                             {statusToko !== 'TUTUP' && position && (

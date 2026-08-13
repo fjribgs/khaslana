@@ -268,6 +268,7 @@ export default function Address({
                     transition-colors duration-200
                     cursor-pointer
                     hover:bg-[#1E1B26]
+                    text-gray-900
                     hover:text-[#99FF33]
 
                     disabled:pointer-events-auto

@@ -192,7 +192,13 @@ export default function Profile({
                                     <Button
                                         disabled={processing}
                                         data-test="update-profile-button"
-                                        className='bg-[#99FF33] border border-[#99FF33] hover:bg-[#1E1B26] hover:text-[#99FF33] transition-colors duration-200 hover:cursor-pointer'
+                                        className='
+                                            bg-[#99FF33] hover:bg-[#1E1B26]
+                                            border border-[#99FF33]
+                                            text-gray-900 hover:text-[#99FF33]
+                                            transition-colors duration-200
+                                            cursor-pointer
+                                        '
                                     >
                                         Simpan
                                     </Button>

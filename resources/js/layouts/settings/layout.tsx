@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import { additionalVerification } from '@/routes';
-// import { edit as editAppearance } from '@/routes/appearance';
+import { edit as editAppearance } from '@/routes/appearance';
 import { storeManagement } from '@/routes';
 import { edit } from '@/routes/profile';
 // import { show } from '@/routes/two-factor';
@@ -43,6 +43,11 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
         {
             title: 'Password',
             href: editPassword(),
+            icon: null,
+        },
+        {
+            title: 'Appearance',
+            href: editAppearance(),
             icon: null,
         },
         // {

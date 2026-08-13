@@ -21,7 +21,7 @@ export default function StayPointActions({
                 <button 
                     onClick={onMangkal} 
                     disabled={isLoading}
-                    className="w-full bg-[#99FF33] text-black py-4 rounded-[16px] font-bold text-lg hover:bg-[#8ae62e] transition disabled:opacity-50 shadow-[0_4px_20px_rgba(153,255,51,0.2)]"
+                    className="w-full bg-[#99FF33] text-black py-4 rounded-2xl font-bold text-lg hover:bg-[#8ae62e] transition disabled:opacity-50 shadow-[0_4px_20px_rgba(153,255,51,0.2)]"
                 >
                     {isLoading ? 'Menyimpan...' : 'Mangkal'}
                 </button>
@@ -29,7 +29,7 @@ export default function StayPointActions({
                 <button 
                     onClick={onKeliling} 
                     disabled={isLoading} 
-                    className="w-full bg-[#2F3E1F] border-2 border-[#99FF33]/30 text-[#99FF33] py-4 rounded-[16px] font-bold text-lg hover:bg-[#3a4d26] transition disabled:opacity-50"
+                    className="w-full bg-[#E0ECD2] dark:bg-[#2F3E1F] dark:border-2 border-[#99FF33]/30 dark:text-[#99FF33] py-4 rounded-2xl font-bold text-lg hover:bg-[#99FF33] dark:hover:bg-[#3a4d26] transition disabled:opacity-50"
                 >
                     {isLoading ? 'Menyimpan...' : 'Keliling'}
                 </button>

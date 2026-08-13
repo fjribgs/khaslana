@@ -1,4 +1,5 @@
 import KhaslanaLogo from '@/assets/images/khaslana.svg';
+import KhaslanaLogoDark from '@/assets/images/khaslana-dark.svg';
 
 export default function AppLogo() {
     return (
@@ -9,8 +10,25 @@ export default function AppLogo() {
                 <img
                     src={KhaslanaLogo}
                     alt="Khaslana Logo"
-                    className='fill-current text-white dark:text-black h-12 w-12
-                    group-data-[collapsible=icon]:w-7 group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:mx-auto'
+                    className="
+                        hidden h-12 w-12
+                        group-data-[collapsible=icon]:mx-auto
+                        group-data-[collapsible=icon]:h-7
+                        group-data-[collapsible=icon]:w-7
+                        dark:block
+                    "
+                />
+
+                <img
+                    src={KhaslanaLogoDark}
+                    alt="Khaslana Logo"
+                    className="
+                        h-12 w-12
+                        group-data-[collapsible=icon]:mx-auto
+                        group-data-[collapsible=icon]:h-7
+                        group-data-[collapsible=icon]:w-7
+                        dark:hidden
+                    "
                 />
                 {/* <KhaslanaLogo className="size-5 fill-current text-white dark:text-black" /> */}
             </div>
